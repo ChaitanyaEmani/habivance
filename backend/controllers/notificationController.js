@@ -1,129 +1,83 @@
-// Purpose: Manage alerts and reminders
-// Routes: GET /notifications, POST /notifications, PUT /notifications/:id/read, DELETE /notifications/:id
-// Actions: Create/update/delete habit alerts
+// controllers/notificationController.js
+import notificationService from '../services/notificationService.js';
 
-import * as notificationService from '../services/notificationService.js';
-
-export const getAll = async (req, res) => {
+// Get all notifications
+export const getNotifications = async (req, res) => {
   try {
-    const { isRead, type } = req.query;
-    const filters = {};
-    
-    if (isRead !== undefined) {
-      filters.isRead = isRead === 'true';
-    }
-    if (type) {
-      filters.type = type;
-    }
+    const userId = req.user._id;
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 20;
 
-    const notifications = await notificationService.getAllNotifications(req.user._id, filters);
-    res.status(200).json({
-      success: true,
-      message: 'Notifications retrieved successfully',
-      count: notifications.length,
-      data: notifications,
-    });
+    const result = await notificationService.getAll(userId, page, limit);
+
+    res.status(200).json({ success: true, data: result });
   } catch (error) {
-    console.log(error);
-    res.status(500).json({
-      success: false,
-      message: error.message || 'Failed to retrieve notifications',
-    });
+    res.status(500).json({ success: false, message: error.message });
   }
 };
 
-export const getUnread = async (req, res) => {
+// Get unread count
+export const getUnreadCount = async (req, res) => {
   try {
-    const notifications = await notificationService.getUnreadNotifications(req.user._id);
-    res.status(200).json({
-      success: true,
-      message: 'Unread notifications retrieved successfully',
-      count: notifications.length,
-      data: notifications,
-    });
+    const count = await notificationService.getUnreadCount(req.user._id);
+    res.status(200).json({ success: true, data: { count } });
   } catch (error) {
-    console.log(error);
-    res.status(500).json({
-      success: false,
-      message: error.message || 'Failed to retrieve unread notifications',
-    });
+    res.status(500).json({ success: false, message: error.message });
   }
 };
 
-export const create = async (req, res) => {
-  try {
-    const { habitId, dailyHabitId, alertTime, message, type } = req.body;
-    
-    const notification = await notificationService.createReminder(
-      req.user._id,
-      habitId,
-      dailyHabitId,
-      alertTime,
-      message,
-      type
-    );
-
-    res.status(201).json({
-      success: true,
-      message: 'Notification created successfully',
-      data: notification,
-    });
-  } catch (error) {
-    console.log(error);
-    res.status(400).json({
-      success: false,
-      message: error.message || 'Failed to create notification',
-    });
-  }
-};
-
+// Mark as read
 export const markAsRead = async (req, res) => {
   try {
-    const notification = await notificationService.markAsRead(req.params.id, req.user._id);
-    res.status(200).json({
-      success: true,
-      message: 'Notification marked as read successfully',
-      data: notification,
-    });
+    const notification = await notificationService.markAsRead(
+      req.params.notificationId,
+      req.user._id
+    );
+
+    if (!notification) {
+      return res.status(404).json({ success: false, message: 'Notification not found' });
+    }
+
+    res.status(200).json({ success: true, data: notification });
   } catch (error) {
-    console.log(error);
-    res.status(400).json({
-      success: false,
-      message: error.message || 'Failed to mark notification as read',
-    });
+    res.status(500).json({ success: false, message: error.message });
   }
 };
 
-export const markAllRead = async (req, res) => {
+// Mark all as read
+export const markAllAsRead = async (req, res) => {
   try {
-    const result = await notificationService.markAllAsRead(req.user._id);
-    res.status(200).json({
-      success: true,
-      message: 'All notifications marked as read successfully',
-      data: result,
-    });
+    await notificationService.markAllAsRead(req.user._id);
+    res.status(200).json({ success: true, message: 'All marked as read' });
   } catch (error) {
-    console.log(error);
-    res.status(500).json({
-      success: false,
-      message: error.message || 'Failed to mark all notifications as read',
-    });
+    res.status(500).json({ success: false, message: error.message });
   }
 };
 
+// Delete notification
 export const deleteNotification = async (req, res) => {
   try {
-    const result = await notificationService.deleteNotification(req.params.id, req.user._id);
-    res.status(200).json({
-      success: true,
-      message: 'Notification deleted successfully',
-      data: result,
-    });
+    const result = await notificationService.delete(
+      req.params.notificationId,
+      req.user._id
+    );
+
+    if (!result) {
+      return res.status(404).json({ success: false, message: 'Notification not found' });
+    }
+
+    res.status(200).json({ success: true, message: 'Deleted successfully' });
   } catch (error) {
-    console.log(error);
-    res.status(400).json({
-      success: false,
-      message: error.message || 'Failed to delete notification',
-    });
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+// Delete all read notifications
+export const deleteAllRead = async (req, res) => {
+  try {
+    await notificationService.deleteAllRead(req.user._id);
+    res.status(200).json({ success: true, message: 'All read notifications deleted' });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
   }
 };

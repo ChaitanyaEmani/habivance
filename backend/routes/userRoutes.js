@@ -5,8 +5,7 @@ import express from 'express';
 import {
   getProfile,
   updateProfile,
-  deleteProfile,
-  getProfileImage,
+  deleteProfile
 } from '../controllers/userController.js';
 import { validateProfile } from '../middlewares/validationMiddleware.js';
 import { protect } from '../middlewares/authMiddleware.js';
@@ -34,6 +33,6 @@ router.delete('/profile', deleteProfile);
 // @route   GET /api/users/profile-image
 // @desc    Get user profile image
 // @access  Private
-router.get('/profile-image', getProfileImage);
+// router.get('/profile-image', getProfileImage);
 
 export default router;

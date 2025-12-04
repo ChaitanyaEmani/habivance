@@ -1,45 +1,64 @@
-// Purpose: Progress calculation and statistics
-// Functions: getDailyStats(), getWeeklyStats(), calculateStreaks(), getCompletionRate()
-// Logic:
-// Count completed vs pending habits
-// Calculate total time spent per habit
-// Generate chart data for frontend
 
-import DailyHabit from '../models/DailyHabit.js';
+import Habit from '../models/Habit.js';
 import { calculateStreak, calculateLongestStreak } from '../utils/streakCalculator.js';
 
 export const getDailyStats = async (userId, date) => {
   try {
     const queryDate = date ? new Date(date) : new Date();
     queryDate.setHours(0, 0, 0, 0);
+    const nextDay = new Date(queryDate.getTime() + 24 * 60 * 60 * 1000);
 
-    const habits = await DailyHabit.find({
-      userId,
-      date: {
-        $gte: queryDate,
-        $lt: new Date(queryDate.getTime() + 24 * 60 * 60 * 1000),
-      },
-    }).populate('habitId');
+    // Get all habits for the user
+    const habits = await Habit.find({ userId });
 
-    const total = habits.length;
-    const completed = habits.filter(h => h.status === 'completed').length;
-    const inProgress = habits.filter(h => h.status === 'in-progress').length;
-    const pending = habits.filter(h => h.status === 'pending').length;
-    const skipped = habits.filter(h => h.status === 'skipped').length;
+    // Filter habits that have activity on the query date
+    const habitsWithActivity = habits.filter(habit => {
+      return habit.habitHistory.some(entry => {
+        const entryDate = new Date(entry.date);
+        entryDate.setHours(0, 0, 0, 0);
+        return entryDate.getTime() === queryDate.getTime();
+      });
+    });
 
-    const totalTimeSpent = habits.reduce((sum, h) => sum + (h.actualDuration || 0), 0);
+    const total = habitsWithActivity.length;
+    const completed = habitsWithActivity.filter(habit => {
+      const dayEntry = habit.habitHistory.find(entry => {
+        const entryDate = new Date(entry.date);
+        entryDate.setHours(0, 0, 0, 0);
+        return entryDate.getTime() === queryDate.getTime();
+      });
+      return dayEntry && dayEntry.status === 'completed';
+    }).length;
+
+    const totalTimeSpent = habitsWithActivity.reduce((sum, habit) => {
+      const dayEntry = habit.habitHistory.find(entry => {
+        const entryDate = new Date(entry.date);
+        entryDate.setHours(0, 0, 0, 0);
+        return entryDate.getTime() === queryDate.getTime();
+      });
+      return sum + (dayEntry?.duration || 0);
+    }, 0);
+
+    const pending = total - completed;
     const completionRate = total > 0 ? ((completed / total) * 100).toFixed(2) : 0;
 
     return {
       date: queryDate,
       total,
       completed,
-      inProgress,
       pending,
-      skipped,
       completionRate: parseFloat(completionRate),
       totalTimeSpent,
-      habits: habits,
+      habits: habitsWithActivity.map(habit => ({
+        _id: habit._id,
+        name: habit.name,
+        category: habit.category,
+        status: habit.habitHistory.find(entry => {
+          const entryDate = new Date(entry.date);
+          entryDate.setHours(0, 0, 0, 0);
+          return entryDate.getTime() === queryDate.getTime();
+        })?.status || 'pending',
+      })),
     };
   } catch (error) {
     console.error('Error in getDailyStats:', error);
@@ -56,33 +75,45 @@ export const getWeeklyStats = async (userId) => {
     startDate.setDate(startDate.getDate() - 6);
     startDate.setHours(0, 0, 0, 0);
 
-    const habits = await DailyHabit.find({
-      userId,
-      date: { $gte: startDate, $lte: endDate },
-    }).populate('habitId');
+    const habits = await Habit.find({ userId });
 
     const dailyBreakdown = [];
     for (let i = 0; i < 7; i++) {
       const currentDate = new Date(startDate);
       currentDate.setDate(currentDate.getDate() + i);
-      
-      const dayHabits = habits.filter(h => {
-        const habitDate = new Date(h.date);
-        habitDate.setHours(0, 0, 0, 0);
-        return habitDate.getTime() === currentDate.getTime();
+      currentDate.setHours(0, 0, 0, 0);
+
+      let dayCompleted = 0;
+      let dayTotal = 0;
+      let dayTimeSpent = 0;
+
+      habits.forEach(habit => {
+        const entry = habit.habitHistory.find(e => {
+          const entryDate = new Date(e.date);
+          entryDate.setHours(0, 0, 0, 0);
+          return entryDate.getTime() === currentDate.getTime();
+        });
+
+        if (entry) {
+          dayTotal++;
+          if (entry.status === 'completed') {
+            dayCompleted++;
+          }
+          dayTimeSpent += entry.duration || 0;
+        }
       });
 
       dailyBreakdown.push({
-        date: currentDate,
-        total: dayHabits.length,
-        completed: dayHabits.filter(h => h.status === 'completed').length,
-        timeSpent: dayHabits.reduce((sum, h) => sum + (h.actualDuration || 0), 0),
+        date: new Date(currentDate),
+        total: dayTotal,
+        completed: dayCompleted,
+        timeSpent: dayTimeSpent,
       });
     }
 
-    const total = habits.length;
-    const completed = habits.filter(h => h.status === 'completed').length;
-    const totalTimeSpent = habits.reduce((sum, h) => sum + (h.actualDuration || 0), 0);
+    const total = dailyBreakdown.reduce((sum, day) => sum + day.total, 0);
+    const completed = dailyBreakdown.reduce((sum, day) => sum + day.completed, 0);
+    const totalTimeSpent = dailyBreakdown.reduce((sum, day) => sum + day.timeSpent, 0);
     const completionRate = total > 0 ? ((completed / total) * 100).toFixed(2) : 0;
 
     return {
@@ -111,33 +142,36 @@ export const getMonthlyStats = async (userId) => {
     startDate.setDate(startDate.getDate() - 29);
     startDate.setHours(0, 0, 0, 0);
 
-    const habits = await DailyHabit.find({
-      userId,
-      date: { $gte: startDate, $lte: endDate },
-    }).populate('habitId');
+    const habits = await Habit.find({ userId });
 
-    const total = habits.length;
-    const completed = habits.filter(h => h.status === 'completed').length;
-    const totalTimeSpent = habits.reduce((sum, h) => sum + (h.actualDuration || 0), 0);
-    const completionRate = total > 0 ? ((completed / total) * 100).toFixed(2) : 0;
-
-    // Group by habit
+    let total = 0;
+    let completed = 0;
+    let totalTimeSpent = 0;
     const habitStats = {};
-    habits.forEach(h => {
-      const habitId = h.habitId._id.toString();
-      if (!habitStats[habitId]) {
+
+    habits.forEach(habit => {
+      const entriesInRange = habit.habitHistory.filter(entry => {
+        const entryDate = new Date(entry.date);
+        return entryDate >= startDate && entryDate <= endDate;
+      });
+
+      if (entriesInRange.length > 0) {
+        const habitId = habit._id.toString();
         habitStats[habitId] = {
-          habitName: h.habitId.habitName,
-          category: h.habitId.category,
-          total: 0,
-          completed: 0,
-          timeSpent: 0,
+          habitName: habit.name,
+          category: habit.category,
+          total: entriesInRange.length,
+          completed: entriesInRange.filter(e => e.status === 'completed').length,
+          timeSpent: entriesInRange.reduce((sum, e) => sum + (e.duration || 0), 0),
         };
+
+        total += entriesInRange.length;
+        completed += habitStats[habitId].completed;
+        totalTimeSpent += habitStats[habitId].timeSpent;
       }
-      habitStats[habitId].total++;
-      if (h.status === 'completed') habitStats[habitId].completed++;
-      habitStats[habitId].timeSpent += h.actualDuration || 0;
     });
+
+    const completionRate = total > 0 ? ((completed / total) * 100).toFixed(2) : 0;
 
     return {
       period: 'Last 30 days',
@@ -158,34 +192,16 @@ export const getMonthlyStats = async (userId) => {
 
 export const getStreaks = async (userId) => {
   try {
-    const habits = await DailyHabit.find({ userId })
-      .populate('habitId')
-      .sort({ date: -1 });
+    const habits = await Habit.find({ userId });
 
-    // Group by habit
-    const habitGroups = {};
-    habits.forEach(h => {
-      const habitId = h.habitId._id.toString();
-      if (!habitGroups[habitId]) {
-        habitGroups[habitId] = {
-          habitId: h.habitId._id,
-          habitName: h.habitId.habitName,
-          category: h.habitId.category,
-          history: [],
-        };
-      }
-      habitGroups[habitId].history.push(h);
-    });
-
-    // Calculate streaks for each habit
-    const streakData = Object.values(habitGroups).map(group => {
-      const currentStreak = calculateStreak(group.history);
-      const longestStreak = calculateLongestStreak(group.history);
+    const streakData = habits.map(habit => {
+      const currentStreak = calculateStreak(habit.habitHistory);
+      const longestStreak = calculateLongestStreak(habit.habitHistory);
 
       return {
-        habitId: group.habitId,
-        habitName: group.habitName,
-        category: group.category,
+        habitId: habit._id,
+        habitName: habit.name,
+        category: habit.category,
         currentStreak,
         longestStreak,
       };
@@ -204,20 +220,33 @@ export const getStreaks = async (userId) => {
 export const getCompletionRate = async (userId, days = 30) => {
   try {
     const endDate = new Date();
+    endDate.setHours(23, 59, 59, 999);
+    
     const startDate = new Date();
-    startDate.setDate(startDate.getDate() - days);
+    startDate.setDate(startDate.getDate() - (days - 1));
+    startDate.setHours(0, 0, 0, 0);
 
-    const habits = await DailyHabit.find({
-      userId,
-      date: { $gte: startDate, $lte: endDate },
+    const habits = await Habit.find({ userId });
+
+    let total = 0;
+    let completed = 0;
+
+    habits.forEach(habit => {
+      const entriesInRange = habit.habitHistory.filter(entry => {
+        const entryDate = new Date(entry.date);
+        return entryDate >= startDate && entryDate <= endDate;
+      });
+
+      total += entriesInRange.length;
+      completed += entriesInRange.filter(e => e.status === 'completed').length;
     });
 
-    const total = habits.length;
-    const completed = habits.filter(h => h.status === 'completed').length;
     const rate = total > 0 ? ((completed / total) * 100).toFixed(2) : 0;
 
     return {
       period: `Last ${days} days`,
+      startDate,
+      endDate,
       total,
       completed,
       completionRate: parseFloat(rate),

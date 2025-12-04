@@ -1,14 +1,12 @@
-// Purpose: Calculate consecutive completion days
-// Function: calculateStreak(habitHistory)
-// Logic: Count days where status = "completed" without gaps
-
 export const calculateStreak = (habitHistory) => {
   if (!habitHistory || habitHistory.length === 0) {
     return 0;
   }
 
   // Sort by date (most recent first)
-  const sortedHistory = habitHistory.sort((a, b) => new Date(b.date) - new Date(a.date));
+  const sortedHistory = [...habitHistory].sort(
+    (a, b) => new Date(b.date) - new Date(a.date)
+  );
 
   let streak = 0;
   let currentDate = new Date();
@@ -20,7 +18,14 @@ export const calculateStreak = (habitHistory) => {
 
     // Check if habit was completed
     if (sortedHistory[i].status !== 'completed') {
-      break;
+      // If it's a miss on a consecutive day, break the streak
+      const expectedDate = new Date(currentDate);
+      expectedDate.setDate(expectedDate.getDate() - i);
+      
+      if (habitDate.getTime() === expectedDate.getTime()) {
+        break;
+      }
+      continue;
     }
 
     // Calculate expected date for consecutive streak
@@ -43,7 +48,9 @@ export const calculateLongestStreak = (habitHistory) => {
     return 0;
   }
 
-  const sortedHistory = habitHistory.sort((a, b) => new Date(a.date) - new Date(b.date));
+  const sortedHistory = [...habitHistory].sort(
+    (a, b) => new Date(a.date) - new Date(b.date)
+  );
 
   let longestStreak = 0;
   let currentStreak = 0;
@@ -59,10 +66,11 @@ export const calculateLongestStreak = (habitHistory) => {
         
         if (dayDifference === 1) {
           currentStreak++;
-        } else {
+        } else if (dayDifference > 1) {
           longestStreak = Math.max(longestStreak, currentStreak);
           currentStreak = 1;
         }
+        // If dayDifference === 0, it's the same day, skip
       } else {
         currentStreak = 1;
       }
@@ -82,6 +90,6 @@ export const getStreakStatus = (streak) => {
   if (streak === 0) return { status: 'Start', message: 'Begin your journey!' };
   if (streak < 7) return { status: 'Building', message: 'Keep it up!' };
   if (streak < 30) return { status: 'Strong', message: 'Great progress!' };
-  if (streak < 100) return { status: 'Champion', message: 'You\'re unstoppable!' };
+  if (streak < 100) return { status: 'Champion', message: "You're unstoppable!" };
   return { status: 'Legend', message: 'Amazing dedication!' };
 };

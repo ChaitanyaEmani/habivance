@@ -1,96 +1,103 @@
-// Purpose: Timer tracking logic
-// Functions: startTimer(habitId), stopTimer(habitId), calculateDuration()
-// Logic: Record start timestamp, calculate elapsed time, update actualDuration
 
-import DailyHabit from '../models/DailyHabit.js';
+import Habit from '../models/Habit.js';
 
-export const startTimer = async (dailyHabitId, userId) => {
+export const startTimer = async (habitId, userId) => {
   try {
-    const dailyHabit = await DailyHabit.findOne({
-      _id: dailyHabitId,
+    const habit = await Habit.findOne({
+      _id: habitId,
       userId,
     });
 
-    if (!dailyHabit) {
-      throw new Error('Daily habit not found');
+    if (!habit) {
+      throw new Error('Habit not found');
     }
 
-    if (dailyHabit.status === 'in-progress') {
+    if (habit.timerStatus === 'running') {
       throw new Error('Timer is already running');
     }
 
-    if (dailyHabit.status === 'completed') {
-      throw new Error('Habit is already completed');
-    }
+    // Start or resume timer
+    habit.startTime = new Date();
+    habit.timerStatus = 'running';
 
-    // Start timer
-    dailyHabit.startTime = new Date();
-    dailyHabit.status = 'in-progress';
-    dailyHabit.endTime = null;
-
-    await dailyHabit.save();
-    return await dailyHabit.populate('habitId');
+    await habit.save();
+    return habit;
   } catch (error) {
     console.error('Error starting timer:', error);
     throw error;
   }
 };
 
-export const stopTimer = async (dailyHabitId, userId) => {
+export const stopTimer = async (habitId, userId) => {
   try {
-    const dailyHabit = await DailyHabit.findOne({
-      _id: dailyHabitId,
+    const habit = await Habit.findOne({
+      _id: habitId,
       userId,
     });
 
-    if (!dailyHabit) {
-      throw new Error('Daily habit not found');
+    if (!habit) {
+      throw new Error('Habit not found');
     }
 
-    if (dailyHabit.status !== 'in-progress') {
+    if (habit.timerStatus !== 'running') {
       throw new Error('Timer is not running');
     }
 
-    // Stop timer
-    dailyHabit.endTime = new Date();
-    
-    // Calculate duration
-    const duration = calculateDuration(dailyHabit.startTime, dailyHabit.endTime);
-    dailyHabit.actualDuration = duration;
+    // Calculate total duration
+    const currentDuration = calculateDuration(habit.startTime, new Date());
+    const totalDuration = habit.pausedDuration + currentDuration;
 
-    await dailyHabit.save();
-    return await dailyHabit.populate('habitId');
+    // Stop timer and mark as completed
+    habit.timerStatus = 'idle';
+    habit.startTime = null;
+    habit.pausedDuration = 0;
+
+    // Update streak
+    habit.streak += 1;
+    if (habit.streak > habit.longestStreak) {
+      habit.longestStreak = habit.streak;
+    }
+
+    // Add to history
+    habit.habitHistory.push({
+      date: new Date(),
+      status: 'completed',
+      duration: totalDuration,
+    });
+
+    await habit.save();
+    return habit;
   } catch (error) {
     console.error('Error stopping timer:', error);
     throw error;
   }
 };
 
-export const pauseTimer = async (dailyHabitId, userId) => {
+export const pauseTimer = async (habitId, userId) => {
   try {
-    const dailyHabit = await DailyHabit.findOne({
-      _id: dailyHabitId,
+    const habit = await Habit.findOne({
+      _id: habitId,
       userId,
     });
 
-    if (!dailyHabit) {
-      throw new Error('Daily habit not found');
+    if (!habit) {
+      throw new Error('Habit not found');
     }
 
-    if (dailyHabit.status !== 'in-progress') {
+    if (habit.timerStatus !== 'running') {
       throw new Error('Timer is not running');
     }
 
-    // Calculate duration so far
-    const currentDuration = calculateDuration(dailyHabit.startTime, new Date());
-    dailyHabit.actualDuration = (dailyHabit.actualDuration || 0) + currentDuration;
+    // Calculate duration so far and add to pausedDuration
+    const currentDuration = calculateDuration(habit.startTime, new Date());
+    habit.pausedDuration += currentDuration;
     
     // Pause timer
-    dailyHabit.status = 'pending';
-    dailyHabit.startTime = null;
+    habit.timerStatus = 'paused';
+    habit.startTime = null;
 
-    await dailyHabit.save();
-    return await dailyHabit.populate('habitId');
+    await habit.save();
+    return habit;
   } catch (error) {
     console.error('Error pausing timer:', error);
     throw error;
@@ -117,30 +124,31 @@ export const calculateDuration = (startTime, endTime) => {
   }
 };
 
-export const getTimerStatus = async (dailyHabitId, userId) => {
+export const getTimerStatus = async (habitId, userId) => {
   try {
-    const dailyHabit = await DailyHabit.findOne({
-      _id: dailyHabitId,
+    const habit = await Habit.findOne({
+      _id: habitId,
       userId,
-    }).populate('habitId');
+    });
 
-    if (!dailyHabit) {
-      throw new Error('Daily habit not found');
+    if (!habit) {
+      throw new Error('Habit not found');
     }
 
-    let elapsedTime = dailyHabit.actualDuration || 0;
+    let elapsedTime = habit.pausedDuration || 0;
 
     // If timer is running, add current elapsed time
-    if (dailyHabit.status === 'in-progress' && dailyHabit.startTime) {
-      const currentElapsed = calculateDuration(dailyHabit.startTime, new Date());
+    if (habit.timerStatus === 'running' && habit.startTime) {
+      const currentElapsed = calculateDuration(habit.startTime, new Date());
       elapsedTime += currentElapsed;
     }
 
     return {
-      dailyHabit,
-      isRunning: dailyHabit.status === 'in-progress',
+      habit,
+      isRunning: habit.timerStatus === 'running',
+      isPaused: habit.timerStatus === 'paused',
       elapsedTime,
-      startTime: dailyHabit.startTime,
+      startTime: habit.startTime,
     };
   } catch (error) {
     console.error('Error getting timer status:', error);

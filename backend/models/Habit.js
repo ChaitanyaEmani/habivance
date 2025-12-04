@@ -1,47 +1,66 @@
-// Purpose: Pre-defined habits database (exercise, diet, health tips)
-// Fields: habitName, category, description, recommendedFor, defaultDuration, criteria
-// Example: "Walk 2km" for general health, "Eat leafy vegetables" for eye care
-
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 const habitSchema = new mongoose.Schema(
   {
-    habitName: {
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+    name: {
       type: String,
-      required: [true, 'Habit name is required'],
-      trim: true,
+      required: true,
     },
     category: {
       type: String,
-      required: [true, 'Category is required'],
-      enum: ['Exercise', 'Diet', 'Health', 'Study', 'Lifestyle', 'Mental Health'],
+      default: "General",
     },
     description: {
       type: String,
-      required: [true, 'Description is required'],
+      default: "",
     },
-    recommendedFor: {
-      type: [String],
-      default: [],
-    },
-    criteria: {
-      type: [String],
-      default: [],
-    },
-    defaultDuration: {
-      type: Number, // in minutes
-      default: 30,
-    },
-    icon: {
+    frequency: {
       type: String,
-      default: '🎯',
+      enum: ["daily", "weekly"],
+      required: true,
+    },
+    priority: {
+      type: String,
+      enum: ["low", "medium", "high"],
+      default: "medium",
+    },
+    streak: {
+      type: Number,
+      default: 0,
+    },
+    longestStreak: {
+      type: Number,
+      default: 0,
+    },
+    habitHistory: [
+      {
+        date: { type: Date, required: true },
+        status: { type: String, enum: ["completed", "missed"], required: true },
+        duration: { type: Number, default: 0 }, // Duration in minutes
+      }
+    ],
+    // Timer fields
+    timerStatus: {
+      type: String,
+      enum: ["idle", "running", "paused"],
+      default: "idle",
+    },
+    startTime: {
+      type: Date,
+      default: null,
+    },
+    pausedDuration: {
+      type: Number,
+      default: 0, // Accumulated duration when paused (in minutes)
     },
   },
-  {
-    timestamps: true,
-  }
+  { timestamps: true }
 );
 
-const Habit = mongoose.model('Habit', habitSchema);
-
-export default Habit;
+habitSchema.index({ userId: 1, name: 1 }, { unique: true });
+export default mongoose.models.Habit || mongoose.model("Habit", habitSchema);
