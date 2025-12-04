@@ -43,15 +43,3 @@ export const validateProfile = [
   },
 ];
 
-export const validateDailyHabit = [
-  body('habitId').notEmpty().withMessage('Habit ID is required'),
-  body('date').optional().isISO8601().withMessage('Invalid date format'),
-  body('scheduledTime').optional().matches(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/).withMessage('Invalid time format (HH:MM)'),
-  (req, res, next) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
-    }
-    next();
-  },
-];

@@ -1,6 +1,3 @@
-// Purpose: Generate progress reports and statistics
-// Routes: GET /analytics/daily, GET /analytics/weekly, GET /analytics/monthly, GET /analytics/streaks
-// Actions: Return completion rates, time spent, streaks, charts data
 
 import * as analyticsService from '../services/analyticsService.js';
 

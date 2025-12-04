@@ -1,25 +1,25 @@
-// Purpose: Authentication business logic
-// Functions: registerUser(), loginUser(), verifyToken()
-// Logic: Hash passwords, compare passwords, generate JWT tokens
-
 // services/authService.js
 import User from '../models/User.js';
 import { generateToken } from '../utils/tokenGenerator.js';
 import { sendWelcomeEmail } from '../utils/emailService.js';
 import { calculateBMI, getHealthRisk } from "../utils/bmiCalculator.js";
+import { getHabitRecommendations } from './recommendationService.js';
 
+
+// ---------------- REGISTER USER ----------------
 export const registerUser = async (userData) => {
   try {
     const { name, email, password, age, height, weight, healthIssues, goals } = userData;
 
+    // 🔹 Check if email already exists
     const userExists = await User.findOne({ email });
     if (userExists) throw new Error('User already exists');
 
-    // 1️⃣ Calculate BMI here
+    // 🔹 Calculate BMI
     const { bmi, category } = calculateBMI(height, weight);
     const healthRisk = getHealthRisk(bmi, age);
 
-    // 2️⃣ Create user with BMI added
+    // 🔹 Create user
     const user = await User.create({
       name,
       email,
@@ -29,18 +29,31 @@ export const registerUser = async (userData) => {
       weight,
       healthIssues,
       goals,
-      bmi: bmi,
+      bmi,
       bmiCategory: category,
-      healthRisk
+      healthRisk,
     });
 
-    if (!user) {
-      throw new Error('Invalid user data');
+    if (!user) throw new Error("Invalid user data");
+
+    // 🔹 Habit recommendations
+    let recommendations = [];
+    try {
+      recommendations = await getHabitRecommendations({
+        age,
+        bmi,
+        bmiCategory: category,
+        healthIssues: healthIssues || [],
+        goals: goals || '',
+        weight,
+        height
+      });
+    } catch (err) {
+      console.log("Recommendation error:", err);
     }
 
-    sendWelcomeEmail(email, name).catch(err =>
-      console.error('Welcome email failed:', err)
-    );
+    // 🔹 Send welcome mail (non-blocking)
+    sendWelcomeEmail(email, name).catch(err => console.log("Email error:", err));
 
     const token = generateToken(user._id);
 
@@ -50,51 +63,46 @@ export const registerUser = async (userData) => {
     return {
       user: cleanUser,
       token,
+      recommendations,
     };
+
   } catch (error) {
-    console.error('Error in registerUser:', error);
-    throw new Error(error.message || 'Failed to register user');
+    throw new Error(error.message || "Registration failed");
   }
 };
 
+
+
+
+// ---------------- LOGIN USER ----------------
 export const loginUser = async (email, password) => {
   try {
     const user = await User.findOne({ email }).select('+password');
 
-    if (!user || !(await user.matchPassword(password))) {
-      throw new Error('Invalid email or password');
+    // 🔹 Email not found
+    if (!user) {
+      throw new Error("Email not found");
     }
 
-    // Generate token
+    // 🔹 Password incorrect
+    const isMatch = await user.matchPassword(password);
+    if (!isMatch) {
+      throw new Error("Incorrect password");
+    }
+
+    // 🔹 Generate token
     const token = generateToken(user._id);
 
-    // Convert Mongoose doc → plain object
     const userData = user.toObject();
-
-    // Remove password before returning
     delete userData.password;
 
     return {
       user: userData,
-      token: token,
+      token,
     };
+
   } catch (error) {
-    console.error('Error in loginUser:', error);
-    throw new Error(error.message || 'Failed to login user');
+    throw new Error(error.message || "Login failed");
   }
 };
 
-export const verifyUserToken = async (userId) => {
-  try {
-    const user = await User.findById(userId).select('-password');
-    
-    if (!user) {
-      throw new Error('User not found');
-    }
-
-    return user;
-  } catch (error) {
-    console.error('Error in verifyUserToken:', error);
-    throw new Error(error.message || 'Failed to verify user token');
-  }
-};

@@ -1,56 +1,47 @@
-// Purpose: Store scheduled alerts for habits
-// Fields: userId, habitId, alertTime, message, isRead, type (reminder/completion)
-
+// models/Notification.js
 import mongoose from 'mongoose';
 
-const notificationSchema = new mongoose.Schema(
-  {
-    userId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
-      required: true,
-    },
-    habitId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Habit',
-      required: true,
-    },
-    dailyHabitId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'DailyHabit',
-      default: null,
-    },
-    alertTime: {
-      type: Date,
-      required: true,
-    },
-    message: {
-      type: String,
-      required: true,
-    },
-    type: {
-      type: String,
-      enum: ['reminder', 'completion', 'streak', 'motivation'],
-      default: 'reminder',
-    },
-    isRead: {
-      type: Boolean,
-      default: false,
-    },
-    isSent: {
-      type: Boolean,
-      default: false,
-    },
+const notificationSchema = new mongoose.Schema({
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true,
+    index: true
   },
-  {
-    timestamps: true,
+  type: {
+    type: String,
+    default: 'GENERAL'
+  },
+  title: {
+    type: String,
+    required: true
+  },
+  message: {
+    type: String,
+    required: true
+  },
+  isRead: {
+    type: Boolean,
+    default: false
+  },
+  priority: {
+    type: String,
+    enum: ['low', 'medium', 'high'],
+    default: 'medium'
   }
-);
+}, {
+  timestamps: true
+});
 
-// Index for faster queries
-notificationSchema.index({ userId: 1, isRead: 1 });
-notificationSchema.index({ alertTime: 1, isSent: 1 });
+// Index for fast queries
+notificationSchema.index({ userId: 1, isRead: 1, createdAt: -1 });
 
-const Notification = mongoose.model('Notification', notificationSchema);
+// Delete unread notifications older than 24 hours automatically
+notificationSchema.index({ createdAt: 1 }, {
+  expireAfterSeconds: 86400, // 24 hours
+  partialFilterExpression: { isRead: false }
+});
+
+const Notification = mongoose.models.Notification || mongoose.model('Notification', notificationSchema);
 
 export default Notification;

@@ -1,105 +1,107 @@
-// Purpose: Habit database operations
-// Functions: getAllHabits(), getHabitById(), getHabitsByCategory()
-// Logic: Query habits from database with filters
+import Habit from "../models/Habit.js";
+import { calculateStreak, calculateLongestStreak } from "../utils/streakCalculator.js";
 
-import Habit from '../models/Habit.js';
+export const habitService = {
 
-export const getAllHabits = async (filters = {}) => {
-  try {
-    const query = {};
+  async addHabit(userId, habitData) {
 
-    if (filters.category) {
-      query.category = filters.category;
+  // Normalize name for duplicate check
+  const normalizedName = habitData.name.trim().toLowerCase();
+
+  // Check if the user already has this habit (pending or completed)
+  const existingHabit = await Habit.findOne({
+    userId,
+    name: { $regex: new RegExp(`^${normalizedName}$`, 'i') }
+  });
+
+  if (existingHabit) {
+    throw {
+      status: 409,
+      message: "You have already done this habit earlier."
+    };
+  }
+
+  // Save habit with normalized name
+  return await Habit.create({
+    userId,
+    name: normalizedName,
+    ...habitData,
+  });
+},
+
+  
+  async getUserHabits(userId) {
+  const habits = await Habit.find({ userId }).sort({ createdAt: -1 });
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  for (let habit of habits) {
+    const lastEntry = habit.habitHistory[habit.habitHistory.length - 1];
+
+    const lastEntryDate = lastEntry ? new Date(lastEntry.date) : null;
+    if (lastEntryDate) lastEntryDate.setHours(0, 0, 0, 0);
+
+    // If no record for today, add one (missed by default)
+    if (!lastEntry || lastEntryDate.getTime() !== today.getTime()) {
+
+      habit.habitHistory.push({
+        date: today,
+        status: "missed",
+      });
+
+      // Reset streak (missed)
+      habit.streak = 0;
+
+      await habit.save();
     }
-
-    if (filters.search) {
-      query.$or = [
-        { habitName: { $regex: filters.search, $options: 'i' } },
-        { description: { $regex: filters.search, $options: 'i' } },
-      ];
-    }
-
-    const habits = await Habit.find(query).sort({ category: 1, habitName: 1 });
-    return habits;
-  } catch (error) {
-    console.error('Error in getAllHabits:', error);
-    throw new Error(error.message || 'Failed to retrieve habits');
   }
-};
 
-export const getHabitById = async (habitId) => {
-  try {
-    const habit = await Habit.findById(habitId);
+  return habits;
+},
 
-    if (!habit) {
-      throw new Error('Habit not found');
-    }
 
-    return habit;
-  } catch (error) {
-    console.error('Error in getHabitById:', error);
-    throw new Error(error.message || 'Failed to retrieve habit');
+  async deleteHabit(habitId, userId) {
+    return await Habit.findOneAndDelete({ _id: habitId, userId });
+  },
+
+  async completeHabit(habitId, userId) {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  const habit = await Habit.findOne({ _id: habitId, userId });
+  if (!habit) return null;
+
+  let todayEntry = habit.habitHistory.find(
+    (h) => new Date(h.date).setHours(0,0,0,0) === today.getTime()
+  );
+
+  // If already completed → stop
+  if (todayEntry && todayEntry.status === "completed") {
+    return {
+      error: true,
+      message: "Already completed today"
+    };
   }
-};
 
-export const getHabitsByCategory = async (categoryQuery) => {
-  try {
-    // Fetch all habits
-    const habits = await Habit.find();
-
-    // Filter in JS: normalize stored category and compare
-    const filteredHabits = habits.filter(habit => 
-      habit.category.replace(/\s+/g, '').toLowerCase() === categoryQuery
-    );
-
-    return filteredHabits.sort((a, b) => a.habitName.localeCompare(b.habitName));
-  } catch (error) {
-    console.error('Error in getHabitsByCategory:', error);
-    throw new Error(error.message || 'Failed to retrieve habits by category');
-  }
-};
-
-
-export const createHabit = async (habitData) => {
-  try {
-    const habit = await Habit.create(habitData);
-    return habit;
-  } catch (error) {
-    console.error('Error in createHabit:', error);
-    throw new Error(error.message || 'Failed to create habit');
-  }
-};
-
-export const updateHabit = async (habitId, updateData) => {
-  try {
-    const habit = await Habit.findByIdAndUpdate(habitId, updateData, {
-      new: true,
-      runValidators: true,
+  // If today exists but is "missed" → convert to completed
+  if (todayEntry && todayEntry.status === "missed") {
+    todayEntry.status = "completed";
+  } 
+  else {
+    // Today entry does not exist → create new entry
+    habit.habitHistory.push({
+      date: today,
+      status: "completed"
     });
-
-    if (!habit) {
-      throw new Error('Habit not found');
-    }
-
-    return habit;
-  } catch (error) {
-    console.error('Error in updateHabit:', error);
-    throw new Error(error.message || 'Failed to update habit');
   }
-};
 
-export const deleteHabit = async (habitId) => {
-  try {
-    const habit = await Habit.findById(habitId);
+  // Recalculate streaks
+  habit.streak = calculateStreak(habit.habitHistory);
+  habit.longestStreak = calculateLongestStreak(habit.habitHistory);
 
-    if (!habit) {
-      throw new Error('Habit not found');
-    }
+  await habit.save();
+  return habit;
+}
 
-    await habit.deleteOne();
-    return { message: 'Habit deleted successfully' };
-  } catch (error) {
-    console.error('Error in deleteHabit:', error);
-    throw new Error(error.message || 'Failed to delete habit');
-  }
 };

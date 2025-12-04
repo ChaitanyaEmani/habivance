@@ -57,11 +57,7 @@ const userSchema = new mongoose.Schema(
     goals: {
       type: String,
       default: '',
-    },
-    profileImage: {
-      data: Buffer,
-      contentType: String,
-    },
+    }
   },
   {
     timestamps: true,

@@ -28,6 +28,7 @@ export const updateUserProfile = async (userId, updateData) => {
 
     // Update fields
     user.name = updateData.name || user.name;
+    user.email = updateData.email || user.email;
     user.age = updateData.age !== undefined ? updateData.age : user.age;
     user.height = updateData.height !== undefined ? updateData.height : user.height;
     user.weight = updateData.weight !== undefined ? updateData.weight : user.weight;
@@ -47,17 +48,17 @@ export const updateUserProfile = async (userId, updateData) => {
     }
 
     // Handle profile image if provided
-    if (updateData.profileImage) {
-      try {
-        user.profileImage = {
-          data: Buffer.from(updateData.profileImage, 'base64'),
-          contentType: updateData.imageType || 'image/jpeg',
-        };
-      } catch (imageError) {
-        console.error('Error processing profile image:', imageError);
-        throw new Error('Invalid profile image format');
-      }
-    }
+    // if (updateData.profileImage) {
+    //   try {
+    //     user.profileImage = {
+    //       data: Buffer.from(updateData.profileImage, 'base64'),
+    //       contentType: updateData.imageType || 'image/jpeg',
+    //     };
+    //   } catch (imageError) {
+    //     console.error('Error processing profile image:', imageError);
+    //     throw new Error('Invalid profile image format');
+    //   }
+    // }
 
     const updatedUser = await user.save();
 
@@ -95,20 +96,20 @@ export const deleteUser = async (userId) => {
   }
 };
 
-export const getUserProfileImage = async (userId) => {
-  try {
-    const user = await User.findById(userId).select('profileImage');
+// export const getUserProfileImage = async (userId) => {
+//   try {
+//     const user = await User.findById(userId).select('profileImage');
 
-    if (!user || !user.profileImage || !user.profileImage.data) {
-      throw new Error('Profile image not found');
-    }
+//     if (!user || !user.profileImage || !user.profileImage.data) {
+//       throw new Error('Profile image not found');
+//     }
 
-    return {
-      image: user.profileImage.data,
-      contentType: user.profileImage.contentType,
-    };
-  } catch (error) {
-    console.error('Error getting user profile image:', error);
-    throw error;
-  }
-};
+//     return {
+//       image: user.profileImage.data,
+//       contentType: user.profileImage.contentType,
+//     };
+//   } catch (error) {
+//     console.error('Error getting user profile image:', error);
+//     throw error;
+//   }
+// };

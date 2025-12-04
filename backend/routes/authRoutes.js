@@ -2,9 +2,8 @@
 // POST /api/auth/login → authController.login
 
 import express from 'express';
-import { register, login, getMe } from '../controllers/authController.js';
+import { register, login } from '../controllers/authController.js';
 import { validateRegister, validateLogin } from '../middlewares/validationMiddleware.js';
-import { protect } from '../middlewares/authMiddleware.js';
 
 const router = express.Router();
 
@@ -18,9 +17,5 @@ router.post('/register', validateRegister, register);
 // @access  Public
 router.post('/login', validateLogin, login);
 
-// @route   GET /api/auth/me
-// @desc    Get current logged in user
-// @access  Private
-router.get('/me', protect, getMe);
 
 export default router;
