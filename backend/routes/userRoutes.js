@@ -1,6 +1,3 @@
-// GET /api/users/profile → userController.getProfile
-// PUT /api/users/profile → userController.updateProfile
-
 import express from 'express';
 import {
   getProfile,
@@ -9,30 +6,22 @@ import {
 } from '../controllers/userController.js';
 import { validateProfile } from '../middlewares/validationMiddleware.js';
 import { protect } from '../middlewares/authMiddleware.js';
-
+import rateLimit from 'express-rate-limit';
+import { getProfileLimiter,updateProfileLimiter,deleteProfileLimiter } from '../middlewares/rateLimiter.js';
 const router = express.Router();
 
-// All routes are protected (require authentication)
+// 🔐 Protect all routes
 router.use(protect);
 
-// @route   GET /api/users/profile
-// @desc    Get user profile
-// @access  Private
-router.get('/profile', getProfile);
 
-// @route   PUT /api/users/profile
-// @desc    Update user profile
-// @access  Private
-router.put('/profile', validateProfile, updateProfile);
 
-// @route   DELETE /api/users/profile
-// @desc    Delete user account
-// @access  Private
-router.delete('/profile', deleteProfile);
+// GET user profile
+router.get('/profile', getProfileLimiter, getProfile);
 
-// @route   GET /api/users/profile-image
-// @desc    Get user profile image
-// @access  Private
-// router.get('/profile-image', getProfileImage);
+// UPDATE user profile
+router.put('/profile', updateProfileLimiter, validateProfile, updateProfile);
+
+// DELETE user profile
+router.delete('/profile', deleteProfileLimiter, deleteProfile);
 
 export default router;

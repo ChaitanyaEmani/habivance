@@ -9,7 +9,6 @@ import authRoutes from './routes/authRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 import habitRoutes from './routes/habitRoutes.js';
 import recommendationRoutes from './routes/recommendationRoutes.js';
-import customHabitRoutes from './routes/customHabitRoutes.js';
 import timerRoutes from './routes/timerRoutes.js';
 import analyticsRoutes from './routes/analyticsRoutes.js';
 import notificationRoutes from './routes/notificationRoutes.js'; 
@@ -23,11 +22,12 @@ app.use(cors());
 app.use(express.json({ limit: '10mb' })); // Increased limit for base64 images
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
+app.set("trust proxy", 1);
+
 app.use('/api/auth', authRoutes);
 app.use('/api/user', userRoutes);
 app.use('/api/habits', habitRoutes);
 app.use('/api/recommendations', recommendationRoutes);
-app.use('/api/custom-habits', customHabitRoutes);
 app.use('/api/timer', timerRoutes);
 app.use('/api/analytics',analyticsRoutes);
 app.use('/api/notifications',notificationRoutes);
