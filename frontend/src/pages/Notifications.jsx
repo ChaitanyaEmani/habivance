@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import NotificationSettings from '../components/NotificationSettings';
+import NotificationSettings from '../components/notifications/NotificationSettings';
 
 // Import separated components
 import NotificationsHeader from '../components/notifications/NotificationsHeader';

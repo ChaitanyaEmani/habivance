@@ -1,5 +1,3 @@
-// Timer.jsx - Place this in your components folder
-
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { Play, Pause, Square, Clock } from 'lucide-react';
@@ -8,37 +6,42 @@ import { toast } from 'react-toastify';
 const API_URL = import.meta.env.VITE_API_BASE_URL;
 
 const Timer = ({ habitId, onComplete }) => {
-  const [time, setTime] = useState(0); // Time in seconds
+  const [time, setTime] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   const [loading, setLoading] = useState(false);
   const intervalRef = useRef(null);
+  const hasFetchedRef = useRef(false);
 
-  // Fetch timer status on mount
+  // Fetch timer status only once on mount
   useEffect(() => {
-    fetchTimerStatus();
-    return () => {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-      }
-    };
-  }, [habitId]);
-
-  // Update timer every second when running
-  useEffect(() => {
-    if (isRunning) {
-      intervalRef.current = setInterval(() => {
-        setTime(prev => prev + 1);
-      }, 1000);
-    } else {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-      }
+    if (!hasFetchedRef.current) {
+      fetchTimerStatus();
+      hasFetchedRef.current = true;
     }
 
     return () => {
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
+      }
+    };
+  }, []);
+
+  // Update timer every second when running
+  useEffect(() => {
+    if (isRunning && !intervalRef.current) {
+      intervalRef.current = setInterval(() => {
+        setTime(prev => prev + 1);
+      }, 1000);
+    } else if (!isRunning && intervalRef.current) {
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
+    }
+
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
       }
     };
   }, [isRunning]);
@@ -55,10 +58,12 @@ const Timer = ({ habitId, onComplete }) => {
       const { isRunning: running, elapsedTime } = res.data.data;
       setIsRunning(running);
       setIsPaused(!running && elapsedTime > 0);
-      setTime(elapsedTime * 60); // Convert minutes to seconds
+      setTime(elapsedTime * 60);
     } catch (error) {
       const serverMessage = error.response?.data?.message;
-      toast.error(serverMessage);
+      if (serverMessage) {
+        toast.error(serverMessage);
+      }
       console.error('Error fetching timer status:', error);
     }
   };
@@ -76,12 +81,12 @@ const Timer = ({ habitId, onComplete }) => {
           },
         }
       );
-      toast.success(res.data.message);
+      toast.success(res.data.message || 'Timer started!');
       setIsRunning(true);
       setIsPaused(false);
     } catch (error) {
       const serverMessage = error.response?.data?.message;
-      toast.error(serverMessage);
+      toast.error(serverMessage || 'Failed to start timer');
       console.error('Error starting timer:', error);
     } finally {
       setLoading(false);
@@ -101,12 +106,12 @@ const Timer = ({ habitId, onComplete }) => {
           },
         }
       );
-      toast.success(res.data.message);
+      toast.success(res.data.message || 'Timer paused');
       setIsRunning(false);
       setIsPaused(true);
     } catch (error) {
       const serverMessage = error.response?.data?.message;
-      toast.error(serverMessage);
+      toast.error(serverMessage || 'Failed to pause timer');
       console.error('Error pausing timer:', error);
     } finally {
       setLoading(false);
@@ -126,18 +131,17 @@ const Timer = ({ habitId, onComplete }) => {
           },
         }
       );
-      toast.success(res.data.message);
+      toast.success(res.data.message || 'Habit completed!');
       setIsRunning(false);
       setIsPaused(false);
       setTime(0);
 
-      // Call the onComplete callback to update the parent component
       if (onComplete) {
         onComplete(res.data.data);
       }
     } catch (error) {
       const serverMessage = error.response?.data?.message;
-      toast.error(serverMessage);
+      toast.error(serverMessage || 'Failed to complete habit');
       console.error('Error stopping timer:', error);
     } finally {
       setLoading(false);
@@ -179,7 +183,7 @@ const Timer = ({ habitId, onComplete }) => {
           <button
             onClick={handleStart}
             disabled={loading}
-            className="flex items-center gap-2 px-8 py-4 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-lg"
+            className="flex items-center gap-2 px-8 py-4 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-lg active:scale-95"
           >
             <Play className="w-6 h-6" />
             {isPaused ? 'Resume' : 'Start'}
@@ -188,7 +192,7 @@ const Timer = ({ habitId, onComplete }) => {
           <button
             onClick={handlePause}
             disabled={loading}
-            className="flex items-center gap-2 px-8 py-4 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-lg"
+            className="flex items-center gap-2 px-8 py-4 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-lg active:scale-95"
           >
             <Pause className="w-6 h-6" />
             Pause
@@ -198,7 +202,7 @@ const Timer = ({ habitId, onComplete }) => {
         <button
           onClick={handleStop}
           disabled={loading || time === 0}
-          className="flex items-center gap-2 px-8 py-4 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-lg"
+          className="flex items-center gap-2 px-8 py-4 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-lg active:scale-95"
         >
           <Square className="w-6 h-6" />
           Complete

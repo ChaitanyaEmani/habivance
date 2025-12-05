@@ -3,23 +3,23 @@ import notificationService from '../services/notificationService.js';
 
 export const addHabit = async (req, res) => {
   try {
-    const habit = await habitService.addHabit(req.user._id, req.body);
+    const habitData = await habitService.addHabit(req.user._id, req.body);
 
     res.status(201).json({
       success: true,
       message: "Habit added successfully",
-      data: habit,
+      data: habitData,
     });
 
     // Create notification (non-blocking)
     notificationService.create(
       req.user._id,
       'New Habit Added 🎯',
-      `"${habit.name}" has been added to your routine. Start building consistency today!`,
+      `"${habitData.habit}" has been added to your routine. Start building consistency today!`,
       'HABIT_ADDED',
       'low'
     ).then(() => {
-      console.log('✅ Habit addition notification sent for:', habit.name);
+      console.log('✅ Habit addition notification sent for:', habitData.habit);
     }).catch(err => {
       console.error('❌ Failed to create habit addition notification:', err.message);
     });
@@ -79,11 +79,11 @@ export const deleteHabit = async (req, res) => {
       notificationService.create(
         req.user._id,
         'Habit Removed 🗑️',
-        `"${habitToDelete.name}" has been deleted from your routine. ${streakInfo}`,
+        `"${habitToDelete.habit}" has been deleted from your routine. ${streakInfo}`,
         'HABIT_REMOVED',
         'low'
       ).then(() => {
-        console.log('✅ Habit deletion notification sent for:', habitToDelete.name);
+        console.log('✅ Habit deletion notification sent for:', habitToDelete.habit);
       }).catch(err => {
         console.error('❌ Failed to create deletion notification:', err.message);
       });
@@ -97,74 +97,84 @@ export const deleteHabit = async (req, res) => {
 
 export const completeHabit = async (req, res) => {
   try {
-    const habit = await habitService.completeHabit(req.params.id, req.user._id);
+    const habitData = await habitService.completeHabit(req.params.id, req.user._id);
 
-    if (!habit) {
+    if (!habitData) {
       return res.status(404).json({ success: false, message: "Habit not found" });
     }
 
     res.status(200).json({
       success: true,
       message: "Habit completed",
-      data: habit,
+      data: habitData,
     });
 
-    // Create completion notification (non-blocking)
-    const currentStreak = habit.currentStreak || habit.streak || 0;
-    const streakMessage = currentStreak > 1 
-      ? `${currentStreak} day streak! Keep it up!` 
-      : 'Great start! Day 1 complete!';
+    // Correct streak values
+    const currentStreak = habitData.currentStreak || habitData.streak || 0;
+    const longestStreak = habitData.longestStreak || 0;
+    const previousStreak = habitData.previousStreak || 0;
 
-    notificationService.create(
-      req.user._id,
-      'Habit Completed! 🎉',
-      `You completed "${habit.name}". ${streakMessage}`,
-      'HABIT_COMPLETED',
-      'medium'
-    ).then(() => {
-      console.log('✅ Habit completion notification sent for:', habit.name);
-    }).catch(err => {
-      console.error('❌ Failed to create completion notification:', err.message);
-    });
+    // Completion notification
+    const streakMessage =
+      currentStreak > 1
+        ? `${currentStreak} day streak! Keep it up!`
+        : "Great start! Day 1 complete!";
 
-    // Milestone notifications for special streaks
+    notificationService
+      .create(
+        req.user._id,
+        "Habit Completed! 🎉",
+        `You completed "${habitData.habit}". ${streakMessage}`,
+        "HABIT_COMPLETED",
+        "medium"
+      )
+      .then(() => console.log("✅ Habit completion notification sent"))
+      .catch((err) =>
+        console.error("❌ Failed to create completion notification:", err.message)
+      );
+
+    // Milestone notifications
     if ([7, 30, 100, 365].includes(currentStreak)) {
       const milestones = {
-        7: 'One Week',
-        30: 'One Month',
-        100: '100 Days',
-        365: 'One Year'
+        7: "One Week",
+        30: "One Month",
+        100: "100 Days",
+        365: "One Year",
       };
 
-      notificationService.create(
-        req.user._id,
-        `Milestone Achieved! 🏆`,
-        `Congratulations! You've maintained "${habit.name}" for ${milestones[currentStreak]}! Amazing dedication!`,
-        'HABIT_MILESTONE',
-        'high'
-      ).then(() => {
-        console.log(`✅ Milestone notification sent for ${currentStreak} day streak`);
-      }).catch(err => {
-        console.error('❌ Failed to create milestone notification:', err.message);
-      });
+      notificationService
+        .create(
+          req.user._id,
+          `Milestone Achieved! 🏆`,
+          `Congratulations! You've maintained "${habitData.habit}" for ${milestones[currentStreak]}!`,
+          "HABIT_MILESTONE",
+          "high"
+        )
+        .then(() =>
+          console.log(
+            `✅ Milestone notification sent for ${currentStreak} day streak`
+          )
+        )
+        .catch((err) =>
+          console.error("❌ Failed to create milestone notification:", err.message)
+        );
     }
 
-    // New longest streak notification
-    const longestStreak = habit.longestStreak || 0;
-    if (currentStreak > 3 && currentStreak === longestStreak && currentStreak > (habit.previousStreak || 0)) {
-      notificationService.create(
-        req.user._id,
-        'New Record! 🔥',
-        `You've set a new personal record for "${habit.name}" with ${currentStreak} consecutive days!`,
-        'HABIT_RECORD',
-        'high'
-      ).then(() => {
-        console.log('✅ New record notification sent');
-      }).catch(err => {
-        console.error('❌ Failed to create record notification:', err.message);
-      });
+    // New longest streak record
+    if (currentStreak > 3 && currentStreak === longestStreak && currentStreak > previousStreak) {
+      notificationService
+        .create(
+          req.user._id,
+          "New Record! 🔥",
+          `You've set a new personal record for "${habitData.habit}" with ${currentStreak} consecutive days!`,
+          "HABIT_RECORD",
+          "high"
+        )
+        .then(() => console.log("✅ New record notification sent"))
+        .catch((err) =>
+          console.error("❌ Failed to create record notification:", err.message)
+        );
     }
-
   } catch (error) {
     console.log(error);
     res.status(500).json({ success: false, message: "Failed to complete habit" });

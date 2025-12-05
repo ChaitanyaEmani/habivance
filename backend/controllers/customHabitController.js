@@ -9,37 +9,37 @@ import {
 // 📌 Add a new user-defined habit
 export const addCustomHabit = async (req, res) => {
   try {
-    const { name, category, description, frequency, priority } = req.body;
+    const { habit, category, description, duration, priority } = req.body;
     const userId = req.user.id || req.user._id;
 
     // Validate required fields
-    if (!name || !frequency) {
+    if (!habit || !duration) {
       return res.status(400).json({
         success: false,
-        message: "Name and frequency are required"
+        message: "habit and duration are required"
       });
     }
 
     // Check if habit already exists (case-insensitive)
     const existingHabit = await Habit.findOne({
       userId,
-      name: { $regex: new RegExp(`^${name.trim()}$`, 'i') }
+      habit: { $regex: new RegExp(`^${habit.trim()}$`, 'i') }
     });
 
     if (existingHabit) {
       return res.status(409).json({
         success: false,
-        message: "A habit with this name already exists"
+        message: "A habit with this habit already exists"
       });
     }
 
     // Create new habit
     const newHabit = await Habit.create({
       userId,
-      name: name.trim(),
+      habit: habit.trim(),
       category: category || "General",
       description: description || "",
-      frequency,
+      duration,
       priority: priority || "medium",
       streak: 0,
       longestStreak: 0,
@@ -57,7 +57,7 @@ export const addCustomHabit = async (req, res) => {
     notificationService.create(
       userId,
       'New Habit Created 🎯',
-      `"${newHabit.name}" has been added to your routine. Start building your streak today!`,
+      `"${newHabit.habit}" has been added to your routine. Start building your streak today!`,
       'HABIT_CREATED',
       'low'
     ).then(() => {

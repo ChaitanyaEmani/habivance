@@ -69,7 +69,6 @@ class HabitRecommender:
         
         # Get top K predictions
         top_indices = np.argsort(probabilities)[-top_k:][::-1]
-        top_probs = probabilities[top_indices]
         
         # Convert indices to habit names
         top_habits = self.preprocessor.inverse_transform_habit(top_indices)
@@ -77,7 +76,7 @@ class HabitRecommender:
         # Prepare recommendations with details
         recommendations = []
         
-        for habit, confidence in zip(top_habits, top_probs):
+        for habit in top_habits:
             # Get habit details from dataset
             habit_info = self._get_habit_details(habit)
             
@@ -85,11 +84,15 @@ class HabitRecommender:
                 'habit': habit,
                 'category': habit_info.get('category', 'Health'),
                 'duration': int(habit_info.get('duration', 30)),
-                'confidence': float(confidence),
+                'priority': habit_info.get('priority', 'medium'),
                 'description': self._generate_description(habit, habit_info)
             }
             
             recommendations.append(recommendation)
+        
+        # Sort by priority (high -> medium -> low)
+        priority_order = {'high': 0, 'medium': 1, 'low': 2}
+        recommendations.sort(key=lambda x: priority_order.get(x['priority'], 1))
         
         return recommendations
     
@@ -100,11 +103,12 @@ class HabitRecommender:
             if not habit_row.empty:
                 return {
                     'category': habit_row.iloc[0]['category'],
-                    'duration': habit_row.iloc[0]['duration']
+                    'duration': habit_row.iloc[0]['duration'],
+                    'priority': habit_row.iloc[0]['priority']
                 }
         
         # Default values if not found
-        return {'category': 'Health', 'duration': 30}
+        return {'category': 'Health', 'duration': 30, 'priority': 'medium'}
     
     def _generate_description(self, habit, habit_info):
         """Generate a brief description for the habit"""
@@ -181,7 +185,7 @@ if __name__ == "__main__":
             print(f"\n{j}. {rec['habit']}")
             print(f"   Category: {rec['category']}")
             print(f"   Duration: {rec['duration']} minutes")
-            print(f"   Confidence: {rec['confidence']:.2%}")
+            print(f"   Priority: {rec['priority']}")
             print(f"   {rec['description']}")
     
     # Print model info
