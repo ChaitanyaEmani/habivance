@@ -1,4 +1,3 @@
-
 import express from 'express';
 import {
   startTimer,
@@ -7,28 +6,29 @@ import {
   getTimerStatus,
 } from '../controllers/timerController.js';
 import { protect } from '../middlewares/authMiddleware.js';
+import rateLimit from 'express-rate-limit';
 
+import {timerLimiter} from "../middlewares/rateLimiter.js";
 const router = express.Router();
 
+
+
+// Apply protect first
 router.use(protect);
 
-// @route   POST /api/timer/start
-// @desc    Start timer for a habit
-// @body    habitId - Required
+// Apply rate limiter to all timer routes
+router.use(timerLimiter);
+
+// Start Timer
 router.post('/start', startTimer);
 
-// @route   POST /api/timer/stop
-// @desc    Stop timer and mark habit as completed
-// @body    habitId - Required
+// Stop Timer
 router.post('/stop', stopTimer);
 
-// @route   POST /api/timer/pause
-// @desc    Pause timer for a habit
-// @body    habitId - Required
+// Pause Timer
 router.post('/pause', pauseTimer);
 
-// @route   GET /api/timer/status/:habitId
-// @desc    Get timer status for a habit
+// Get Timer Status
 router.get('/status/:habitId', getTimerStatus);
 
 export default router;
