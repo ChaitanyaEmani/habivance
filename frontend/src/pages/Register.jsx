@@ -136,7 +136,7 @@ const Register = () => {
         localStorage.setItem('userName',res.data.data.user.name);
         // Redirect to dashboard
         toast.success(res.data.message);
-        navigate('/recommendations');
+        navigate('/profile');
       }
     } catch (err) {
       const serverMessage = err.response?.data?.message;

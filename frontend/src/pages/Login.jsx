@@ -42,7 +42,7 @@ const Login = () => {
         localStorage.setItem('userName',res.data.data.user.name);
         // Redirect to dashboard
         toast.success(res.data.message);
-        navigate('/recommendations');
+        navigate('/profile');
       } else {
         setError('Login failed. Please try again.');
       }
