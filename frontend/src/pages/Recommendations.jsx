@@ -21,7 +21,7 @@ const Recommendations = () => {
   useEffect(() => {
     const fetchRecommendations = async () => {
       try {
-        const res = await axios.get(`${API_URL}/api/recommendations/`, {
+        const res = await axios.get(`${API_URL}api/recommendations/`, {
           headers: {
             Authorization: `Bearer ${token}`
           }
@@ -39,7 +39,7 @@ const Recommendations = () => {
 
   const addRoutine = async (rec) => {
     try {
-      const res = await axios.post(`${API_URL}/api/habits/add`, rec, {
+      const res = await axios.post(`${API_URL}api/habits/add`, rec, {
         headers: {
           Authorization: `Bearer ${token}`
         }

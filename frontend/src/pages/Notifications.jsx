@@ -34,7 +34,7 @@ const Notifications = () => {
   const fetchNotifications = async (pageNum = 1) => {
     setLoading(true);
     try {
-      const response = await axios.get(`${API_URL}/api/notifications?page=${pageNum}&limit=20`, {
+      const response = await axios.get(`${API_URL}api/notifications?page=${pageNum}&limit=20`, {
         headers: getAuthHeaders()
       });
 
@@ -60,7 +60,7 @@ const Notifications = () => {
   const markAsRead = async (notificationId) => {
     try {
       const response = await axios.put(
-        `${API_URL}/api/notifications/${notificationId}/read`,
+        `${API_URL}api/notifications/${notificationId}/read`,
         {},
         { headers: getAuthHeaders() }
       );
@@ -83,7 +83,7 @@ const Notifications = () => {
   const markAllAsRead = async () => {
     try {
       const response = await axios.put(
-        `${API_URL}/api/notifications/mark-all-read`,
+        `${API_URL}api/notifications/mark-all-read`,
         {},
         { headers: getAuthHeaders() }
       );
@@ -103,7 +103,7 @@ const Notifications = () => {
   const deleteNotification = async (notificationId) => {
     try {
       const response = await axios.delete(
-        `${API_URL}/api/notifications/${notificationId}`,
+        `${API_URL}api/notifications/${notificationId}`,
         { headers: getAuthHeaders() }
       );
 
@@ -123,7 +123,7 @@ const Notifications = () => {
 
     try {
       const response = await axios.delete(
-        `${API_URL}/api/notifications/read-all`,
+        `${API_URL}api/notifications/read-all`,
         { headers: getAuthHeaders() }
       );
 
