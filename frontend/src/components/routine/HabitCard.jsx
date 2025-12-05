@@ -1,196 +1,157 @@
-import React from 'react';
-import {
-  Flame,
-  CheckCircle2,
-  Circle,
-  Activity,
-  Droplets,
-  Moon,
-  Coffee,
-  Heart,
-  TrendingUp,
-  Clock,
-  Calendar,
-  Award,
-  Trash2,
-} from 'lucide-react';
+import React, { useState } from "react";
+import { CheckCircle2, Circle, Target, Clock, TrendingUp, Award, Trash2 } from "lucide-react";
+import Modal from "../common/Modal";
+import Timer from "../Timer";
 
-const HabitCard = ({ 
-  routine, 
-  onComplete, 
-  onDelete, 
-  onStartExercise 
-}) => {
-  // Generate icon based on category
+const HabitCard = ({ habit, isCompleted, onComplete, onDelete }) => {
+  const [timer, setTimer] = useState(false);
+
+  const getPriorityColor = (priority) => {
+    const colors = {
+      low: "bg-green-100 text-green-700 border-green-200",
+      medium: "bg-yellow-100 text-yellow-700 border-yellow-200",
+      high: "bg-red-100 text-red-700 border-red-200",
+    };
+    return colors[priority?.toLowerCase()] || "bg-gray-100 text-gray-700 border-gray-200";
+  };
+
   const getCategoryIcon = (category) => {
-    if (!category) return <Activity className="w-5 h-5" />;
-
-    const categoryLower = category.toLowerCase();
-
-    if (categoryLower.includes("hydra") || categoryLower.includes("water")) {
-      return <Droplets className="w-5 h-5" />;
-    }
-    if (categoryLower.includes("sleep") || categoryLower.includes("rest")) {
-      return <Moon className="w-5 h-5" />;
-    }
-    if (
-      categoryLower.includes("exercise") ||
-      categoryLower.includes("fitness") ||
-      categoryLower.includes("workout")
-    ) {
-      return <Activity className="w-5 h-5" />;
-    }
-    if (
-      categoryLower.includes("nutrition") ||
-      categoryLower.includes("food") ||
-      categoryLower.includes("diet")
-    ) {
-      return <Coffee className="w-5 h-5" />;
-    }
-    if (categoryLower.includes("health") || categoryLower.includes("medical")) {
-      return <Heart className="w-5 h-5" />;
-    }
-
-    return <TrendingUp className="w-5 h-5" />;
+    return <Target className="w-4 h-4" />;
   };
 
-  // Generate color based on category
-  const getCategoryColor = (category) => {
-    if (!category) return "bg-gray-100 text-gray-700 border-gray-300";
-
-    let hash = 0;
-    for (let i = 0; i < category.length; i++) {
-      hash = category.charCodeAt(i) + ((hash << 5) - hash);
-    }
-
-    const colors = [
-      "bg-blue-100 text-blue-700 border-blue-300",
-      "bg-purple-100 text-purple-700 border-purple-300",
-      "bg-green-100 text-green-700 border-green-300",
-      "bg-orange-100 text-orange-700 border-orange-300",
-      "bg-red-100 text-red-700 border-red-300",
-      "bg-pink-100 text-pink-700 border-pink-300",
-      "bg-indigo-100 text-indigo-700 border-indigo-300",
-      "bg-teal-100 text-teal-700 border-teal-300",
-      "bg-cyan-100 text-cyan-700 border-cyan-300",
-      "bg-emerald-100 text-emerald-700 border-emerald-300",
-      "bg-lime-100 text-lime-700 border-lime-300",
-      "bg-amber-100 text-amber-700 border-amber-300",
-    ];
-
-    return colors[Math.abs(hash) % colors.length];
-  };
-
-  const handleCompleteClick = () => {
-    if (routine.streak > 0) return;
-
-    if (routine.category.toLowerCase().includes("exercise")) {
-      onStartExercise(routine._id);
-    } else {
-      onComplete(routine._id);
-    }
+  const handleTimerComplete = (data) => {
+    setTimer(false);
+    onComplete(habit._id);
   };
 
   return (
-    <div className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 overflow-hidden">
-      {/* Card Header */}
+    <>
       <div
-        className={`p-4 ${getCategoryColor(routine.category)} border-b-2`}
+        className={`bg-white border shadow-md rounded-2xl p-6 hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 group ${
+          isCompleted ? "border-green-200 bg-green-50/30" : "border-gray-100"
+        }`}
       >
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            {getCategoryIcon(routine.category)}
-            <span className="font-bold text-sm uppercase tracking-wide">
-              {routine.category}
-            </span>
+        {/* Status Badge */}
+        {isCompleted && (
+          <div className="flex items-center gap-2 mb-3 bg-green-100 border border-green-200 rounded-lg px-3 py-1.5 w-fit">
+            <CheckCircle2 className="w-4 h-4 text-green-600" />
+            <span className="text-xs font-semibold text-green-700">Completed Today</span>
           </div>
-          <div className="flex items-center gap-2">
-            {routine.streak > 0 ? (
-              <CheckCircle2 className="w-6 h-6 text-green-600" />
-            ) : (
-              <Circle className="w-6 h-6 text-gray-400" />
+        )}
+
+        {/* Header */}
+        <div className="flex items-start justify-between mb-4">
+          <div className="flex-1">
+            <h2
+              className={`text-xl font-bold mb-2 capitalize group-hover:text-indigo-600 transition-colors ${
+                isCompleted ? "text-gray-600" : "text-gray-900"
+              }`}
+            >
+              {habit.habit}
+            </h2>
+            {habit.description && (
+              <p className="text-sm text-gray-600 leading-relaxed">{habit.description}</p>
             )}
           </div>
         </div>
-      </div>
 
-      {/* Card Body */}
-      <div className="p-6">
-        <h3 className="text-xl font-bold text-gray-800 mb-3">
-          {routine.name}
-        </h3>
+        {/* Meta Info */}
+        <div className="flex flex-wrap gap-2 mb-4">
+          {habit.category && (
+            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-indigo-50 text-indigo-700 rounded-lg text-xs font-medium border border-indigo-100">
+              {getCategoryIcon(habit.category)}
+              {habit.category}
+            </span>
+          )}
+          {habit.priority && (
+            <span
+              className={`inline-flex items-center px-3 py-1.5 rounded-lg text-xs font-medium border ${getPriorityColor(
+                habit.priority
+              )}`}
+            >
+              {habit.priority.charAt(0).toUpperCase() + habit.priority.slice(1)}
+            </span>
+          )}
+        </div>
 
-        {routine.description && (
-          <p className="text-gray-600 text-sm mb-4 leading-relaxed">
-            {routine.description}
-          </p>
+        {/* Duration */}
+        {habit.duration && (
+          <div className="flex items-center gap-2 text-gray-700 mb-4 bg-gray-50 rounded-lg px-3 py-2">
+            <Clock className="w-4 h-4 text-gray-500" />
+            <span className="text-sm font-medium">{habit.duration} minutes</span>
+          </div>
         )}
 
-        {/* Stats */}
-        <div className="grid grid-cols-2 gap-4 mb-4">
-          <div className="bg-gray-50 rounded-lg p-3">
-            <div className="flex items-center gap-2 mb-1">
-              <Flame className="w-4 h-4 text-orange-500" />
-              <span className="text-xs text-gray-600">Current Streak</span>
+        {/* Streaks */}
+        <div className="pt-4 border-t border-gray-100">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 bg-gradient-to-br from-orange-400 to-red-500 rounded-lg flex items-center justify-center">
+                <TrendingUp className="w-4 h-4 text-white" />
+              </div>
+              <div>
+                <p className="text-xs text-gray-500">Current Streak</p>
+                <p className="text-lg font-bold text-gray-900">{habit.streak || 0}</p>
+              </div>
             </div>
-            <p className="text-2xl font-bold text-gray-800">
-              {routine.streak}
-            </p>
-          </div>
-          <div className="bg-gray-50 rounded-lg p-3">
-            <div className="flex items-center gap-2 mb-1">
-              <Award className="w-4 h-4 text-purple-500" />
-              <span className="text-xs text-gray-600">Best Streak</span>
+
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-lg flex items-center justify-center">
+                <Award className="w-4 h-4 text-white" />
+              </div>
+              <div className="text-right">
+                <p className="text-xs text-gray-500">Best Streak</p>
+                <p className="text-lg font-bold text-gray-900">{habit.longestStreak || 0}</p>
+              </div>
             </div>
-            <p className="text-2xl font-bold text-gray-800">
-              {routine.longestStreak || 0}
-            </p>
           </div>
         </div>
 
-        {/* Metadata */}
-        <div className="space-y-2 mb-4">
-          <div className="flex items-center gap-2 text-sm text-gray-600">
-            <Clock className="w-4 h-4" />
-            <span className="capitalize">{routine.frequency}</span>
-          </div>
-          <div className="flex items-center gap-2 text-sm text-gray-600">
-            <Calendar className="w-4 h-4" />
-            <span>
-              {routine.priority === "high" && "🔴 High Priority"}
-              {routine.priority === "medium" && "🟡 Medium Priority"}
-              {routine.priority === "low" && "🟢 Low Priority"}
-            </span>
-          </div>
-        </div>
-      </div>
-
-      {/* Card Footer */}
-      <div className="px-6 pb-6 flex gap-2">
-        <button
-          onClick={handleCompleteClick}
-          disabled={routine.streak > 0}
-          className={`flex-1 py-2 rounded-lg transition-all duration-300 font-semibold
-            ${
-              routine.streak > 0
-                ? "bg-green-100 text-green-700 cursor-not-allowed"
-                : "bg-blue-600 text-white hover:bg-blue-800"
+        {/* Action Buttons */}
+        <div className="flex mt-4 gap-2">
+          <button
+            type="button"
+            onClick={() => {
+              if (!isCompleted) {
+                setTimer(true);
+              }
+            }}
+            disabled={isCompleted}
+            className={`flex-1 p-2.5 rounded-xl font-medium transition-all flex items-center justify-center gap-2 ${
+              isCompleted
+                ? "bg-green-100 text-green-700 cursor-not-allowed border border-green-200"
+                : "bg-indigo-600 text-white hover:bg-indigo-700 active:scale-95 shadow-md hover:shadow-lg"
             }`}
-        >
-          {routine.streak > 0
-            ? "✓ Completed"
-            : routine.category.toLowerCase().includes("exercise")
-            ? "Start Exercise"
-            : "Mark as Completed"}
-        </button>
-        <button
-          onClick={() => onDelete(routine._id)}
-          className="px-4 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition-colors"
-        >
-          <Trash2 className="w-4 h-4" />
-        </button>
+          >
+            {isCompleted ? (
+              <>
+                <CheckCircle2 className="w-4 h-4" />
+                Completed
+              </>
+            ) : (
+              <>
+                <Circle className="w-4 h-4" />
+                Make Complete
+              </>
+            )}
+          </button>
+          <button
+            onClick={() => onDelete(habit._id)}
+            className="p-2.5 rounded-xl bg-red-50 text-red-600 hover:bg-red-100 active:scale-95 transition-all border border-red-200"
+            title="Delete habit"
+          >
+            <Trash2 className="w-5 h-5" />
+          </button>
+        </div>
       </div>
-    </div>
+
+      {/* Timer Modal - Rendered outside the card */}
+      {timer && (
+        <Modal isOpen={timer} onClose={() => setTimer(false)} title="Start Exercise">
+          <Timer habitId={habit._id} onComplete={handleTimerComplete} />
+        </Modal>
+      )}
+    </>
   );
 };
 

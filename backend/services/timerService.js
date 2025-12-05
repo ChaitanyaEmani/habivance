@@ -1,4 +1,3 @@
-
 import Habit from '../models/Habit.js';
 
 export const startTimer = async (habitId, userId) => {
@@ -39,34 +38,59 @@ export const stopTimer = async (habitId, userId) => {
       throw new Error('Habit not found');
     }
 
-    if (habit.timerStatus !== 'running') {
-      throw new Error('Timer is not running');
+    // Allow stopping from both running and paused states
+    if (habit.timerStatus === 'idle') {
+      throw new Error('Timer is not active');
     }
 
-    // Calculate total duration
-    const currentDuration = calculateDuration(habit.startTime, new Date());
-    const totalDuration = habit.pausedDuration + currentDuration;
+    let totalDuration = habit.pausedDuration || 0;
 
-    // Stop timer and mark as completed
+    // If timer is running, calculate current session duration
+    if (habit.timerStatus === 'running' && habit.startTime) {
+      const currentDuration = calculateDuration(habit.startTime, new Date());
+      totalDuration += currentDuration;
+    }
+
+    // Check if habit is already completed today
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const todayEntry = habit.habitHistory.find(entry => {
+      const entryDate = new Date(entry.date);
+      entryDate.setHours(0, 0, 0, 0);
+      return entryDate.getTime() === today.getTime();
+    });
+
+    // Only add to history if not already completed today
+    if (!todayEntry || todayEntry.status !== 'completed') {
+      // Update streak only if completing for the first time today
+      habit.streak += 1;
+      if (habit.streak > habit.longestStreak) {
+        habit.longestStreak = habit.streak;
+      }
+
+      // Add to history
+      habit.habitHistory.push({
+        date: new Date(),
+        status: 'completed',
+        duration: totalDuration,
+      });
+    } else {
+      // Just update the duration if already completed
+      todayEntry.duration = (todayEntry.duration || 0) + totalDuration;
+    }
+
+    // Reset timer state
     habit.timerStatus = 'idle';
     habit.startTime = null;
     habit.pausedDuration = 0;
 
-    // Update streak
-    habit.streak += 1;
-    if (habit.streak > habit.longestStreak) {
-      habit.longestStreak = habit.streak;
-    }
-
-    // Add to history
-    habit.habitHistory.push({
-      date: new Date(),
-      status: 'completed',
-      duration: totalDuration,
-    });
-
     await habit.save();
-    return habit;
+    
+    return {
+      habit,
+      totalDuration
+    };
   } catch (error) {
     console.error('Error stopping timer:', error);
     throw error;
@@ -90,7 +114,7 @@ export const pauseTimer = async (habitId, userId) => {
 
     // Calculate duration so far and add to pausedDuration
     const currentDuration = calculateDuration(habit.startTime, new Date());
-    habit.pausedDuration += currentDuration;
+    habit.pausedDuration = (habit.pausedDuration || 0) + currentDuration;
     
     // Pause timer
     habit.timerStatus = 'paused';
@@ -113,9 +137,9 @@ export const calculateDuration = (startTime, endTime) => {
     const start = new Date(startTime);
     const end = new Date(endTime);
     
-    // Calculate duration in minutes
+    // Calculate duration in minutes (with decimals for accuracy)
     const durationMs = end - start;
-    const durationMinutes = Math.round(durationMs / (1000 * 60));
+    const durationMinutes = durationMs / (1000 * 60);
 
     return durationMinutes > 0 ? durationMinutes : 0;
   } catch (error) {
@@ -145,6 +169,7 @@ export const getTimerStatus = async (habitId, userId) => {
 
     return {
       habit,
+      timerStatus: habit.timerStatus,
       isRunning: habit.timerStatus === 'running',
       isPaused: habit.timerStatus === 'paused',
       elapsedTime,

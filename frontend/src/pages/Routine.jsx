@@ -1,157 +1,61 @@
+import React, { useEffect, useState, useMemo } from "react";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
-import Modal from "../components/common/Modal";
-import Timer from "../components/Timer";
 import { toast } from "react-toastify";
-import Loading from "../components/common/Loading";
-import AddHabitForm from "../components/routine/AddHabitForm";
-import { Target,CheckCircle2,Flame,Award } from "lucide-react";
-// Import separated components
-import PageHeader from "../components/common/PageHeader";
-import StatCard from "../components/common/StatCard";
-import SearchAndFilters from "../components/routine/SearchAndFilters";
+import { Target, CheckCircle2, Circle, Award } from "lucide-react";
+import Modal from "../components/common/Modal";
+// import StatCard from "../components/routine/StatCard";
+import FilterSection from "../components/routine/FilterSection";
 import HabitCard from "../components/routine/HabitCard";
+import AddHabitForm from "../components/routine/AddHabitForm";
 import EmptyState from "../components/routine/EmptyState";
-import FloatingAddButton from "../components/routine/FloatingAddButton";
-
+import StatCard from "../components/common/StatCard";
+import Loading from "../components/common/Loading";
+import PageHeader from "../components/common/PageHeader";
 const API_URL = import.meta.env.VITE_API_BASE_URL;
 
 const Routine = () => {
+  const token = localStorage.getItem("token");
   const [routines, setRoutines] = useState([]);
+  const [search, setSearch] = useState("");
+  const [priorityFilter, setPriorityFilter] = useState("");
+  const [categoryFilter, setCategoryFilter] = useState("");
+  const [statusFilter, setStatusFilter] = useState("all");
   const [loading, setLoading] = useState(true);
-  const [filter, setFilter] = useState("all");
-  const [categoryFilter, setCategoryFilter] = useState("all");
-  const [searchTerm, setSearchTerm] = useState("");
-  const [modalOpen, setModalOpen] = useState(false);
-  const [addOpen, setAddOpen] = useState(false);
-  const [currentRoutineId, setCurrentRoutineId] = useState(null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
+  const [open, setOpen] = useState(false);
+  
+  // Form state
   const [formData, setFormData] = useState({
-    name: "",
-    category: "General",
+    habit: "",
+    category: "",
     description: "",
-    frequency: "daily",
     priority: "medium",
+    duration: ""
   });
+  const [submitting, setSubmitting] = useState(false);
 
-  // Get unique categories from routines
-  const categories = ["all", ...new Set(routines.map((r) => r.category))];
-
-  const handleSubmit = async () => {
-    if (isSubmitting) return;
-
-    if (!formData.name.trim()) {
-      alert("Please enter a habit name");
-      return;
-    }
-
-    const normalizedName = formData.name.toLowerCase().trim();
-    const isDuplicate = routines.some(
-      (routine) => routine.name.toLowerCase().trim() === normalizedName
-    );
-
-    if (isDuplicate) {
-      alert("A habit with this name already exists. Please choose a different name.");
-      return;
-    }
-
-    try {
-      setIsSubmitting(true);
-      const token = localStorage.getItem("token");
-
-      const res = await axios.post(
-        `${API_URL}/api/custom-habits/add`,
-        formData,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      const newHabit = res.data.data || res.data.habit || res.data;
-
-      if (newHabit && newHabit._id) {
-        const alreadyExists = routines.some((r) => r._id === newHabit._id);
-
-        if (!alreadyExists) {
-          setRoutines((prev) => [...prev, newHabit]);
-        }
-
-        setFormData({
-          name: "",
-          category: "Nutrition",
-          description: "",
-          frequency: "daily",
-          priority: "medium",
-        });
-
-        setAddOpen(false);
-        toast.success(res.data.message);
-      } else {
-        await getRoutines();
-        setFormData({
-          name: "",
-          category: "Nutrition",
-          description: "",
-          frequency: "daily",
-          priority: "medium",
-        });
-        setAddOpen(false);
-        toast.success(res.data.message);
-      }
-    } catch (error) {
-      console.error("Error adding habit:", error);
-
-      if (
-        error.response?.status === 409 ||
-        error.response?.status === 400 ||
-        error.response?.data?.message?.toLowerCase().includes("duplicate") ||
-        error.response?.data?.message?.toLowerCase().includes("already exists") ||
-        error.response?.data?.message?.toLowerCase().includes("exist")
-      ) {
-        toast.error("This habit already exists in your list.");
-      } else {
-        toast.error(
-          error.response?.data?.message ||
-            "Failed to add habit. Please try again."
-        );
-      }
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
+  // Fetch routines
   const getRoutines = async () => {
     try {
       setLoading(true);
-      const token = localStorage.getItem("token");
       const res = await axios.get(`${API_URL}/api/habits/`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        headers: { Authorization: `Bearer ${token}` },
       });
 
-      const uniqueRoutines = [];
-      const seenNames = new Set();
+      const unique = [];
+      const seen = new Set();
 
       for (const routine of res.data.data) {
-        const normalizedName = routine.name.toLowerCase().trim();
-
-        if (!seenNames.has(normalizedName)) {
-          seenNames.add(normalizedName);
-          uniqueRoutines.push(routine);
+        const key = routine.habit.toLowerCase().trim();
+        if (!seen.has(key)) {
+          seen.add(key);
+          unique.push(routine);
         }
       }
 
-      setRoutines(uniqueRoutines);
-      toast.success(res.data.message);
-      setLoading(false);
+      setRoutines(unique);
     } catch (error) {
-      const serverMessage = error.response?.data?.message;
-      toast.error(serverMessage);
-      console.log(error.message);
+      toast.error(error.response?.data?.message || "Failed to fetch habits");
+    } finally {
       setLoading(false);
     }
   };
@@ -160,59 +64,29 @@ const Routine = () => {
     getRoutines();
   }, []);
 
-  // Filter routines
-  const filteredRoutines = routines.filter((routine) => {
-    const statusMatch =
-      filter === "all" ||
-      (filter === "completed" && routine.streak > 0) ||
-      (filter === "pending" && routine.streak === 0);
-
-    const categoryMatch =
-      categoryFilter === "all" || routine.category === categoryFilter;
-
-    const searchMatch =
-      routine.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      routine.category.toLowerCase().includes(searchTerm.toLowerCase());
-
-    return statusMatch && categoryMatch && searchMatch;
-  });
-
-  const handleChange = (e) => {
-    let { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  // Calculate stats
-  const totalHabits = routines.length;
-  const completedToday = routines.filter((r) => r.streak > 0).length;
-  const longestStreak = routines.reduce(
-    (max, r) => Math.max(max, r.longestStreak || 0),
-    0
-  );
-  const completionRate =
-    totalHabits > 0 ? Math.round((completedToday / totalHabits) * 100) : 0;
-
-  const handleDelete = async (routineId) => {
-    try {
-      const token = localStorage.getItem("token");
-      const res = await axios.delete(`${API_URL}/api/habits/${routineId}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      setRoutines((prev) => prev.filter((routine) => routine._id !== routineId));
-      toast.success(res.data.message);
-    } catch (error) {
-      const serverMessage = error.response?.data?.message;
-      toast.error(serverMessage);
-      console.log(error.message);
+  // Helper function to check if habit is completed today
+  const isHabitCompletedToday = (habit) => {
+    if (!habit.habitHistory || habit.habitHistory.length === 0) {
+      return false;
     }
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const lastEntry = habit.habitHistory[habit.habitHistory.length - 1];
+    if (!lastEntry) return false;
+
+    const lastEntryDate = new Date(lastEntry.date);
+    lastEntryDate.setHours(0, 0, 0, 0);
+
+    return (
+      lastEntryDate.getTime() === today.getTime() &&
+      lastEntry.status === "completed"
+    );
   };
 
   const handleComplete = async (routineId) => {
     try {
-      const token = localStorage.getItem("token");
       const res = await axios.post(
         `${API_URL}/api/habits/complete/${routineId}`,
         {},
@@ -223,118 +97,230 @@ const Routine = () => {
         }
       );
 
-      if (res.data.data || res.data.habit) {
-        const updatedHabit = res.data.data || res.data.habit;
+      if (res.data.data?.error) {
+        toast.info(res.data.data.message);
+        return;
+      }
 
-        setRoutines((prev) =>
-          prev.map((routine) =>
-            routine._id === routineId ? updatedHabit : routine
+      if (res.data && res.data.data) {
+        setRoutines((prevRoutines) =>
+          prevRoutines.map((routine) =>
+            routine._id === routineId ? res.data.data : routine
           )
         );
-        toast.success(res.data.message);
-      } else {
-        await getRoutines();
-        toast.success(res.data.message);
+        toast.success("Habit marked as completed! 🎉");
       }
     } catch (error) {
-      console.error("Error completing habit:", error);
-      toast.error(
-        error.response?.data?.message || "Failed to mark habit as completed"
-      );
+      const errorMsg = error.response?.data?.message || "Failed to mark as completed";
+      toast.error(errorMsg);
+      console.error(error);
     }
   };
 
-  const handleStartExercise = (routineId) => {
-    setCurrentRoutineId(routineId);
-    setModalOpen(true);
+  const handleDelete = async (routineId) => {
+    if (!window.confirm("Are you sure you want to delete this habit?")) {
+      return;
+    }
+
+    try {
+      await axios.delete(`${API_URL}/api/habits/${routineId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      setRoutines((prevRoutines) =>
+        prevRoutines.filter((routine) => routine._id !== routineId)
+      );
+
+      toast.success("Habit deleted successfully!");
+    } catch (error) {
+      const errorMsg = error.response?.data?.message || "Failed to delete habit";
+      toast.error(errorMsg);
+      console.error(error);
+    }
   };
 
-  if (loading) {
-    return <Loading text="your routines" />;
-  }
+  // Handle form submission
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    
+    if (!formData.habit.trim()) {
+      toast.error("Habit name is required");
+      return;
+    }
+
+    try {
+      setSubmitting(true);
+      
+      const res = await axios.post(
+        `${API_URL}/api/habits/add`,
+        {
+          habit: formData.habit,
+          category: formData.category || "General",
+          description: formData.description,
+          priority: formData.priority,
+          duration: formData.duration ? parseInt(formData.duration) : undefined
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (res.data && res.data.data) {
+        setRoutines((prev) => [...prev, res.data.data]);
+        toast.success("Habit added successfully! 🎉");
+        
+        setFormData({
+          habit: "",
+          category: "",
+          description: "",
+          priority: "medium",
+          duration: ""
+        });
+        setOpen(false);
+      }
+    } catch (error) {
+      const errorMsg = error.response?.data?.message || "Failed to add habit";
+      toast.error(errorMsg);
+      console.error(error);
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  // Handle form input changes
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  // Dynamic categories
+  const categories = useMemo(() => {
+    const set = new Set();
+    routines.forEach((r) => r.category && set.add(r.category));
+    return Array.from(set).sort();
+  }, [routines]);
+
+  // Calculate statistics
+  const stats = useMemo(() => {
+    const completed = routines.filter((r) => isHabitCompletedToday(r)).length;
+    const pending = routines.length - completed;
+    const activeStreaks = routines.filter((r) => (r.streak || 0) > 0).length;
+    const bestStreak = Math.max(...routines.map((r) => r.longestStreak || 0), 0);
+
+    return { completed, pending, activeStreaks, bestStreak };
+  }, [routines]);
+
+  // Apply Filters
+  const filtered = useMemo(() => {
+    return routines.filter((r) => {
+      const matchesSearch = r.habit.toLowerCase().includes(search.toLowerCase());
+      const matchesPriority = priorityFilter ? r.priority === priorityFilter : true;
+      const matchesCategory = categoryFilter ? r.category === categoryFilter : true;
+      const isCompleted = isHabitCompletedToday(r);
+      const matchesStatus =
+        statusFilter === "all"
+          ? true
+          : statusFilter === "completed"
+          ? isCompleted
+          : !isCompleted;
+
+      return matchesSearch && matchesPriority && matchesCategory && matchesStatus;
+    });
+  }, [routines, search, priorityFilter, categoryFilter, statusFilter]);
+
+  // Clear all filters
+  const clearFilters = () => {
+    setSearch("");
+    setPriorityFilter("");
+    setCategoryFilter("");
+    setStatusFilter("all");
+  };
+
+  const hasActiveFilters = search || priorityFilter || categoryFilter || statusFilter !== "all";
 
   return (
-    <div className="min-h-screen bg-blue-50 py-8 px-4">
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 p-6">
       <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <PageHeader onAddClick={() => setAddOpen(true)} title="My Daily Routines" page="routine" subTitle="Track and maintain your healthy habits"/>
-
-        {/* Stats Cards */}
-         {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">  
-          <StatCard title="Total Habits" value={totalHabits} subtitle="" icon={Target} color="blue" />
-          <StatCard title="Completed Today" value={completedToday} subtitle="" icon={CheckCircle2} color="green" />
-          <StatCard title="Longest Streak" value={longestStreak} subtitle="" icon={Flame} color="orange" />
-          <StatCard title="Completion Rate" value={completionRate} subtitle="" icon={Award} color="purple" />
+        {/* Header Section */}
+        <div className="mb-8">
+          <PageHeader title="My Routine" subTitle="Track and manage your daily habits" page="routine" onAddClick={()=>setOpen(true)} />
+            
+          <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <StatCard icon={Target}
+            title="Total Habits"
+            value={routines.length}
+            color="blue" />
+            <StatCard icon={CheckCircle2}
+            title="Completed Today"
+            value={stats.completed}
+            color="green" />
+            <StatCard icon={Circle}
+            title="Pending Today"
+            value={stats.pending}
+            color="orange" />
+            <StatCard icon={Award}
+            title="Best Streak"
+            value={stats.bestStreak}
+            color="purple" />
+          </div>
         </div>
-        {/* Filters and Search */}
-        <SearchAndFilters
-          searchTerm={searchTerm}
-          setSearchTerm={setSearchTerm}
-          filter={filter}
-          setFilter={setFilter}
+
+        {/* Filters Section */}
+        <FilterSection
+          search={search}
+          setSearch={setSearch}
+          statusFilter={statusFilter}
+          setStatusFilter={setStatusFilter}
           categoryFilter={categoryFilter}
           setCategoryFilter={setCategoryFilter}
+          priorityFilter={priorityFilter}
+          setPriorityFilter={setPriorityFilter}
           categories={categories}
+          hasActiveFilters={hasActiveFilters}
+          clearFilters={clearFilters}
+          filteredCount={filtered.length}
+          totalCount={routines.length}
         />
 
-        {/* Routines Grid */}
-        {filteredRoutines.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredRoutines.map((routine) => (
+        {/* Loading State */}
+        {loading ? (
+           <Loading text="routines"/>
+        ) : filtered.length === 0 ? (
+          <EmptyState 
+            hasActiveFilters={hasActiveFilters} 
+            onClearFilters={clearFilters} 
+          />
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filtered.map((item) => (
               <HabitCard
-                key={routine._id}
-                routine={routine}
+                key={item._id}
+                habit={item}
+                isCompleted={isHabitCompletedToday(item)}
                 onComplete={handleComplete}
                 onDelete={handleDelete}
-                onStartExercise={handleStartExercise}
               />
             ))}
           </div>
-        ) : (
-          <EmptyState
-            searchTerm={searchTerm}
-            categoryFilter={categoryFilter}
-            filter={filter}
-            onAddClick={() => setAddOpen(true)}
-          />
         )}
-
-        {/* Floating Add Button */}
-        <FloatingAddButton onClick={() => setAddOpen(true)} />
       </div>
 
       {/* Add Habit Modal */}
-      {addOpen && (
-        <Modal
-          isOpen={addOpen}
-          onClose={() => setAddOpen(false)}
-          title="Add New Habit"
-        >
+      {open && (
+        <Modal onClose={() => setOpen(false)} isOpen={open} title="Add New Habit">
           <AddHabitForm
-            handleChange={handleChange}
-            handleSubmit={handleSubmit}
-            setAddOpen={setAddOpen}
             formData={formData}
-          />
-        </Modal>
-      )}
-
-      {/* Exercise Timer Modal */}
-      {modalOpen && (
-        <Modal
-          isOpen={modalOpen}
-          onClose={() => setModalOpen(false)}
-          title="Start Exercise"
-        >
-          <Timer
-            habitId={currentRoutineId}
-            onComplete={(updatedHabit) => {
-              setRoutines((prev) =>
-                prev.map((r) => (r._id === currentRoutineId ? updatedHabit : r))
-              );
-              setModalOpen(false);
-            }}
+            onChange={handleInputChange}
+            onSubmit={handleSubmit}
+            onCancel={() => setOpen(false)}
+            submitting={submitting}
           />
         </Modal>
       )}

@@ -1,6 +1,4 @@
 // Purpose: Send email notifications
-// Function: sendReminderEmail(userEmail, habitName, time)
-// Uses: Nodemailer or SendGrid
 
 import nodemailer from 'nodemailer';
 

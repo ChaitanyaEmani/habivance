@@ -91,10 +91,6 @@ const Analytics = () => {
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-8 px-4">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        {/* <div className="mb-8">
-          <h1 className="text-4xl font-bold text-gray-800 mb-2">Analytics Dashboard</h1>
-          <p className="text-gray-600">Track your progress and stay motivated</p>
-        </div> */}
         <PageHeader title="Analytics Dashboard" subTitle="Track your progress and stay motivated" />
 
         {/* Period Selector */}

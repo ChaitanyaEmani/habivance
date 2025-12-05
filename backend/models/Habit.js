@@ -7,7 +7,7 @@ const habitSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
-    name: {
+    habit: {
       type: String,
       required: true,
     },
@@ -19,11 +19,6 @@ const habitSchema = new mongoose.Schema(
       type: String,
       default: "",
     },
-    frequency: {
-      type: String,
-      enum: ["daily", "weekly"],
-      required: true,
-    },
     priority: {
       type: String,
       enum: ["low", "medium", "high"],
@@ -32,6 +27,10 @@ const habitSchema = new mongoose.Schema(
     streak: {
       type: Number,
       default: 0,
+    },
+    duration:{
+      type: Number,
+      default: 5,
     },
     longestStreak: {
       type: Number,

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Volume2, VolumeX } from 'lucide-react';
-import notificationSound from '../utils/notificationSound';
+import notificationSound from '../../utils/notificationSound';
 
 const NotificationSettings = () => {
   const [soundEnabled, setSoundEnabled] = useState(notificationSound.isEnabled());

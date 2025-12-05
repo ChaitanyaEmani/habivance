@@ -1,275 +1,275 @@
-bmiCategory,healthIssues,goals,recommendedHabit,category,duration
-Underweight,Anemia,Weight Gain,High-protein breakfast,Diet,30
-Underweight,Fatigue,Weight Gain,High-protein breakfast,Diet,30
-Underweight,Weak Immunity,Weight Gain,High-protein breakfast,Diet,30
-Underweight,None,Weight Gain,High-protein breakfast,Diet,30
-Underweight,None,Muscle Gain,High-protein breakfast,Diet,30
-Underweight,None,Weight Gain,Strength training 3x per week,Fitness,45
-Underweight,Fatigue,Muscle Gain,Strength training 3x per week,Fitness,45
-Underweight,Weak Immunity,Muscle Gain,Strength training 3x per week,Fitness,45
-Underweight,None,Muscle Gain,Strength training 3x per week,Fitness,45
-Underweight,Bone Health,Muscle Gain,Strength training 3x per week,Fitness,45
-Underweight,Anemia,Weight Gain,Iron-rich foods daily,Diet,25
-Underweight,Fatigue,Weight Gain,Iron-rich foods daily,Diet,25
-Underweight,Anemia,General Health,Iron-rich foods daily,Diet,25
-Underweight,Weak Immunity,Weight Gain,Vitamin supplements,Health,5
-Underweight,Fatigue,General Health,Vitamin supplements,Health,5
-Underweight,None,General Health,Vitamin supplements,Health,5
-Underweight,Digestive Issues,Weight Gain,Frequent small meals,Diet,15
-Underweight,Digestive Issues,General Health,Frequent small meals,Diet,15
-Underweight,None,Weight Gain,Frequent small meals,Diet,15
-Underweight,None,Weight Gain,Calorie-dense smoothies,Diet,20
-Underweight,Fatigue,Weight Gain,Calorie-dense smoothies,Diet,20
-Underweight,None,Muscle Gain,Calorie-dense smoothies,Diet,20
-Underweight,Bone Health,Weight Gain,Calcium-rich foods,Diet,20
-Underweight,Bone Health,General Health,Calcium-rich foods,Diet,20
-Underweight,None,Weight Gain,Calcium-rich foods,Diet,20
-Underweight,None,Weight Gain,Healthy fats daily,Diet,25
-Underweight,None,Muscle Gain,Healthy fats daily,Diet,25
-Underweight,Digestive Issues,Weight Gain,Digestive enzymes,Health,10
-Underweight,None,Weight Gain,Post-workout protein shake,Diet,15
-Underweight,None,Muscle Gain,Post-workout protein shake,Diet,15
-Normal,None,General Health,30-minute daily walk,Fitness,30
-Normal,None,Fitness Goal,30-minute daily walk,Fitness,30
-Normal,None,Endurance,30-minute daily walk,Fitness,30
-Normal,None,Weight Management,30-minute daily walk,Fitness,30
-Normal,Stress,General Health,30-minute daily walk,Fitness,30
-Normal,High Stress,General Health,30-minute daily walk,Fitness,30
-Normal,None,General Health,Drink 8 glasses water,Health,10
-Normal,Dehydration,General Health,Drink 8 glasses water,Health,10
-Normal,None,Weight Management,Drink 8 glasses water,Health,10
-Normal,Fatigue,General Health,Drink 8 glasses water,Health,10
-Normal,Stress,Mental Health,10-minute meditation,Mental Health,10
-Normal,Anxiety,Mental Health,10-minute meditation,Mental Health,10
-Normal,High Stress,Mental Health,10-minute meditation,Mental Health,10
-Normal,Depression,Mental Health,10-minute meditation,Mental Health,10
-Normal,Burnout,Mental Health,10-minute meditation,Mental Health,10
-Normal,Insomnia,Mental Health,10-minute meditation,Mental Health,10
-Normal,None,Muscle Gain,Resistance training 4x week,Fitness,60
-Normal,None,Athletic Performance,Resistance training 4x week,Fitness,60
-Normal,None,Fitness Goal,Resistance training 4x week,Fitness,60
-Normal,None,Strength Building,Resistance training 4x week,Fitness,60
-Normal,Eye Strain,General Health,20-20-20 screen rule,Health,5
-Normal,Eye Strain,Work Health,20-20-20 screen rule,Health,5
-Normal,None,General Health,7-8 hours sleep,Health,480
-Normal,Insomnia,Mental Health,7-8 hours sleep,Health,480
-Normal,Fatigue,General Health,7-8 hours sleep,Health,480
-Normal,Stress,Mental Health,7-8 hours sleep,Health,480
-Normal,Anxiety,Mental Health,7-8 hours sleep,Health,480
-Normal,None,General Health,Eat fruits and vegetables,Diet,30
-Normal,None,Weight Management,Eat fruits and vegetables,Diet,30
-Normal,None,Athletic Performance,Eat fruits and vegetables,Diet,30
-Normal,High Cholesterol,General Health,Eat fruits and vegetables,Diet,30
-Normal,None,General Health,Limit processed foods,Diet,20
-Normal,None,Weight Management,Limit processed foods,Diet,20
-Normal,High Cholesterol,General Health,Limit processed foods,Diet,20
-Normal,None,Fitness Goal,Morning stretching,Fitness,15
-Normal,Back Pain,General Health,Morning stretching,Fitness,15
-Normal,Joint Pain,General Health,Morning stretching,Fitness,15
-Normal,None,Flexibility,Morning stretching,Fitness,15
-Normal,None,Flexibility,Yoga practice daily,Fitness,30
-Normal,Stress,Mental Health,Yoga practice daily,Fitness,30
-Normal,Anxiety,Mental Health,Yoga practice daily,Fitness,30
-Normal,Back Pain,General Health,Yoga practice daily,Fitness,30
-Normal,Joint Pain,General Health,Yoga practice daily,Fitness,30
-Normal,Migraine,General Health,Stay hydrated,Health,10
-Normal,None,General Health,Stay hydrated,Health,10
-Normal,Dehydration,General Health,Stay hydrated,Health,10
-Normal,None,General Health,Limit screen time,Health,5
-Normal,Eye Strain,General Health,Limit screen time,Health,5
-Normal,Insomnia,Mental Health,Limit screen time,Health,5
-Normal,Burnout,Mental Health,Regular work breaks,Mental Health,5
-Normal,Stress,Work Health,Regular work breaks,Mental Health,5
-Normal,Eye Strain,Work Health,Regular work breaks,Mental Health,5
-Normal,None,Social Health,Connect with friends weekly,Mental Health,120
-Normal,Depression,Mental Health,Connect with friends weekly,Mental Health,120
-Normal,Anxiety,Mental Health,Connect with friends weekly,Mental Health,120
-Normal,None,General Health,Reduce alcohol intake,Diet,5
-Normal,Fatty Liver,General Health,Reduce alcohol intake,Diet,5
-Normal,High Blood Pressure,General Health,Reduce alcohol intake,Diet,5
-Normal,PMS,General Health,Reduce caffeine intake,Diet,5
-Normal,Anxiety,Mental Health,Reduce caffeine intake,Diet,5
-Normal,Insomnia,Mental Health,Reduce caffeine intake,Diet,5
-Normal,None,General Health,Annual health checkup,Health,120
-Normal,None,Prevention,Annual health checkup,Health,120
-Normal,Seasonal Allergies,General Health,Keep air clean,Health,5
-Normal,Asthma,General Health,Keep air clean,Health,5
-Normal,None,General Health,Floss teeth daily,Health,5
-Normal,None,Dental Health,Floss teeth daily,Health,5
-Normal,None,General Health,Wash hands frequently,Health,2
-Normal,Weak Immunity,General Health,Wash hands frequently,Health,2
-Normal,None,General Health,Sun exposure 15 min,Health,15
-Normal,Vitamin D Deficiency,General Health,Sun exposure 15 min,Health,15
-Normal,Depression,Mental Health,Sun exposure 15 min,Health,15
-Normal,None,Endurance,Jogging 30 minutes,Fitness,30
-Normal,None,Athletic Performance,Jogging 30 minutes,Fitness,30
-Normal,None,Fitness Goal,Jogging 30 minutes,Fitness,30
-Normal,None,Weight Management,Swimming 3x week,Fitness,45
-Normal,None,Endurance,Swimming 3x week,Fitness,45
-Normal,None,Athletic Performance,Swimming 3x week,Fitness,45
-Normal,None,General Health,Balanced meal planning,Diet,30
-Normal,None,Weight Management,Balanced meal planning,Diet,30
-Normal,None,Athletic Performance,Balanced meal planning,Diet,30
-Normal,None,Mental Health,Gratitude journaling,Mental Health,10
-Normal,Depression,Mental Health,Gratitude journaling,Mental Health,10
-Normal,Stress,Mental Health,Gratitude journaling,Mental Health,10
-Overweight,None,Weight Loss,45-minute brisk walk,Fitness,45
-Overweight,Joint Pain,Weight Loss,45-minute brisk walk,Fitness,45
-Overweight,None,General Health,45-minute brisk walk,Fitness,45
-Overweight,High Blood Pressure,Weight Loss,45-minute brisk walk,Fitness,45
-Overweight,High Cholesterol,Weight Loss,45-minute brisk walk,Fitness,45
-Overweight,Fatigue,Weight Loss,45-minute brisk walk,Fitness,45
-Overweight,Pre-diabetes,Weight Loss,Low-carb diet,Diet,40
-Overweight,Insulin Resistance,Weight Loss,Low-carb diet,Diet,40
-Overweight,Diabetes,Weight Loss,Low-carb diet,Diet,40
-Overweight,High Cholesterol,Weight Loss,Low-carb diet,Diet,40
-Overweight,Metabolic Syndrome,Weight Loss,Low-carb diet,Diet,40
-Overweight,None,Weight Loss,Reduce sugar intake,Diet,15
-Overweight,Pre-diabetes,Weight Loss,Reduce sugar intake,Diet,15
-Overweight,Diabetes,Weight Loss,Reduce sugar intake,Diet,15
-Overweight,Insulin Resistance,Weight Loss,Reduce sugar intake,Diet,15
-Overweight,Fatigue,Weight Loss,Reduce sugar intake,Diet,15
-Overweight,Joint Pain,Weight Loss,Low-impact swimming,Fitness,40
-Overweight,Arthritis,Weight Loss,Low-impact swimming,Fitness,40
-Overweight,Back Pain,Weight Loss,Low-impact swimming,Fitness,40
-Overweight,None,Weight Loss,Low-impact swimming,Fitness,40
-Overweight,High Cholesterol,Weight Loss,Fiber-rich foods,Diet,25
-Overweight,High Blood Pressure,Weight Loss,Fiber-rich foods,Diet,25
-Overweight,Metabolic Syndrome,Weight Loss,Fiber-rich foods,Diet,25
-Overweight,None,Weight Loss,Fiber-rich foods,Diet,25
-Overweight,None,Weight Loss,Track calorie intake,Health,10
-Overweight,None,General Health,Track calorie intake,Health,10
-Overweight,Metabolic Syndrome,Weight Loss,Track calorie intake,Health,10
-Overweight,Pre-diabetes,Weight Loss,Track calorie intake,Health,10
-Overweight,Sleep Apnea,Weight Loss,No eating before bed,Diet,5
-Overweight,Snoring,Weight Loss,No eating before bed,Diet,5
-Overweight,GERD,Weight Loss,No eating before bed,Diet,5
-Overweight,None,Weight Loss,Portion control,Diet,20
-Overweight,None,General Health,Portion control,Diet,20
-Overweight,Pre-diabetes,Weight Loss,Portion control,Diet,20
-Overweight,High Cholesterol,Weight Loss,Portion control,Diet,20
-Overweight,Fatigue,Weight Loss,Green tea morning,Diet,10
-Overweight,Metabolic Syndrome,Weight Loss,Green tea morning,Diet,10
-Overweight,None,Weight Loss,Replace sugary drinks,Diet,5
-Overweight,Prediabetes,Weight Loss,Replace sugary drinks,Diet,5
-Overweight,Diabetes,Weight Loss,Replace sugary drinks,Diet,5
-Overweight,High Cholesterol,Weight Loss,Replace sugary drinks,Diet,5
-Overweight,High Blood Pressure,Weight Loss,Low sodium diet,Diet,15
-Overweight,Hypertension,Weight Loss,Low sodium diet,Diet,15
-Overweight,Heart Disease,Weight Loss,Low sodium diet,Diet,15
-Overweight,None,Weight Loss,HIIT workouts 3x week,Fitness,20
-Overweight,None,Fitness Goal,HIIT workouts 3x week,Fitness,20
-Overweight,Pre-diabetes,Weight Loss,HIIT workouts 3x week,Fitness,20
-Overweight,Metabolic Syndrome,Weight Loss,Eliminate trans fats,Diet,20
-Overweight,High Cholesterol,Weight Loss,Eliminate trans fats,Diet,20
-Overweight,Heart Disease,Weight Loss,Eliminate trans fats,Diet,20
-Overweight,None,Weight Loss,Meal prep weekly,Diet,60
-Overweight,None,General Health,Meal prep weekly,Diet,60
-Overweight,Pre-diabetes,Weight Loss,Meal prep weekly,Diet,60
-Overweight,Varicose Veins,Weight Loss,Elevate legs daily,Health,15
-Overweight,Edema,Weight Loss,Elevate legs daily,Health,15
-Overweight,Joint Pain,Weight Loss,Elevate legs daily,Health,15
-Overweight,None,Weight Loss,Use stairs daily,Fitness,10
-Overweight,Joint Pain,Weight Loss,Use stairs daily,Fitness,10
-Overweight,None,Weight Loss,Mindful eating,Diet,30
-Overweight,None,General Health,Mindful eating,Diet,30
-Overweight,Stress,Weight Loss,Mindful eating,Diet,30
-Overweight,None,Weight Loss,Intermittent fasting,Diet,30
-Overweight,Pre-diabetes,Weight Loss,Intermittent fasting,Diet,30
-Overweight,Insulin Resistance,Weight Loss,Intermittent fasting,Diet,30
-Overweight,None,Weight Loss,Cycling 3x week,Fitness,40
-Overweight,Joint Pain,Weight Loss,Cycling 3x week,Fitness,40
-Overweight,None,Weight Loss,Strength training 2x week,Fitness,45
-Overweight,None,Fitness Goal,Strength training 2x week,Fitness,45
-Overweight,None,Weight Loss,Increase protein intake,Diet,25
-Overweight,None,Muscle Gain,Increase protein intake,Diet,25
-Overweight,High Blood Pressure,Weight Loss,DASH diet,Diet,40
-Overweight,Hypertension,Weight Loss,DASH diet,Diet,40
-Overweight,Heart Disease,Weight Loss,DASH diet,Diet,40
-Overweight,None,Weight Loss,Vegetable-rich meals,Diet,30
-Overweight,High Cholesterol,Weight Loss,Vegetable-rich meals,Diet,30
-Overweight,Pre-diabetes,Weight Loss,Vegetable-rich meals,Diet,30
-Obese,Diabetes,Weight Loss,Monitor blood sugar,Health,10
-Obese,Type 2 Diabetes,Weight Loss,Monitor blood sugar,Health,10
-Obese,Pre-diabetes,Weight Loss,Monitor blood sugar,Health,10
-Obese,Insulin Resistance,Weight Loss,Monitor blood sugar,Health,10
-Obese,Hypertension,Weight Loss,Low-sodium DASH diet,Diet,45
-Obese,High Blood Pressure,Weight Loss,Low-sodium DASH diet,Diet,45
-Obese,Heart Disease,Weight Loss,Low-sodium DASH diet,Diet,45
-Obese,Stroke Risk,Weight Loss,Low-sodium DASH diet,Diet,45
-Obese,Kidney Disease,Weight Loss,Low-sodium DASH diet,Diet,45
-Obese,Heart Disease,Weight Loss,Doctor-supervised cardio,Fitness,30
-Obese,Heart Failure,Weight Loss,Doctor-supervised cardio,Fitness,30
-Obese,None,Weight Loss,Doctor-supervised cardio,Fitness,30
-Obese,High Blood Pressure,Weight Loss,Doctor-supervised cardio,Fitness,30
-Obese,Diabetes,Weight Loss,Eliminate refined carbs,Diet,30
-Obese,Type 2 Diabetes,Weight Loss,Eliminate refined carbs,Diet,30
-Obese,Pre-diabetes,Weight Loss,Eliminate refined carbs,Diet,30
-Obese,Insulin Resistance,Weight Loss,Eliminate refined carbs,Diet,30
-Obese,Metabolic Syndrome,Weight Loss,Eliminate refined carbs,Diet,30
-Obese,Sleep Apnea,Weight Loss,Sleep on side elevated,Health,480
-Obese,Snoring,Weight Loss,Sleep on side elevated,Health,480
-Obese,GERD,Weight Loss,Sleep on side elevated,Health,480
-Obese,Joint Pain,Weight Loss,Water aerobics 4x week,Fitness,45
-Obese,Mobility Issues,Weight Loss,Water aerobics 4x week,Fitness,45
-Obese,Arthritis,Weight Loss,Water aerobics 4x week,Fitness,45
-Obese,Back Pain,Weight Loss,Water aerobics 4x week,Fitness,45
-Obese,None,Weight Loss,Water aerobics 4x week,Fitness,45
-Obese,High Cholesterol,Weight Loss,Omega-3 rich foods,Diet,25
-Obese,Heart Disease,Weight Loss,Omega-3 rich foods,Diet,25
-Obese,Stroke Risk,Weight Loss,Omega-3 rich foods,Diet,25
-Obese,Metabolic Syndrome,Weight Loss,Omega-3 rich foods,Diet,25
-Obese,Fatty Liver,Weight Loss,Avoid alcohol and fried foods,Diet,20
-Obese,High Cholesterol,Weight Loss,Avoid alcohol and fried foods,Diet,20
-Obese,Heart Disease,Weight Loss,Avoid alcohol and fried foods,Diet,20
-Obese,Depression,Mental Health,Therapy weekly,Mental Health,60
-Obese,Anxiety,Mental Health,Therapy weekly,Mental Health,60
-Obese,Mental Health Issues,Mental Health,Therapy weekly,Mental Health,60
-Obese,Chronic Pain,Mental Health,Mindfulness meditation,Mental Health,20
-Obese,Stress,Mental Health,Mindfulness meditation,Mental Health,20
-Obese,Anxiety,Mental Health,Mindfulness meditation,Mental Health,20
-Obese,Depression,Mental Health,Mindfulness meditation,Mental Health,20
-Obese,Hypertension,Weight Loss,Blood pressure monitoring,Health,5
-Obese,High Blood Pressure,Weight Loss,Blood pressure monitoring,Health,5
-Obese,Heart Disease,Weight Loss,Blood pressure monitoring,Health,5
-Obese,Stroke Risk,Weight Loss,Blood pressure monitoring,Health,5
-Obese,Stroke Risk,Weight Loss,Leafy greens daily,Diet,25
-Obese,High Cholesterol,Weight Loss,Leafy greens daily,Diet,25
-Obese,Heart Disease,Weight Loss,Leafy greens daily,Diet,25
-Obese,Kidney Disease,Weight Loss,Protein-restricted diet,Diet,40
-Obese,Chronic Kidney Disease,Weight Loss,Protein-restricted diet,Diet,40
-Obese,Gout,Weight Loss,Avoid purine foods,Diet,25
-Obese,Kidney Disease,Weight Loss,Avoid purine foods,Diet,25
-Obese,PCOS,Weight Loss,Low-GI foods,Diet,30
-Obese,Insulin Resistance,Weight Loss,Low-GI foods,Diet,30
-Obese,Diabetes,Weight Loss,Low-GI foods,Diet,30
-Obese,Edema,Weight Loss,Reduce salt and elevate legs,Health,20
-Obese,Swelling,Weight Loss,Reduce salt and elevate legs,Health,20
-Obese,High Blood Pressure,Weight Loss,Reduce salt and elevate legs,Health,20
-Obese,Breathing Issues,Weight Loss,Breathing exercises,Health,10
-Obese,Asthma,Weight Loss,Breathing exercises,Health,10
-Obese,Sleep Apnea,Weight Loss,Breathing exercises,Health,10
-Obese,None,Weight Loss,Chair exercises daily,Fitness,15
-Obese,Mobility Issues,Weight Loss,Chair exercises daily,Fitness,15
-Obese,Joint Pain,Weight Loss,Chair exercises daily,Fitness,15
-Obese,None,Weight Loss,Walking 20 min daily,Fitness,20
-Obese,Heart Disease,Weight Loss,Walking 20 min daily,Fitness,20
-Obese,Joint Pain,Weight Loss,Walking 20 min daily,Fitness,20
-Obese,None,Weight Loss,Meal planning and prep,Diet,60
-Obese,Diabetes,Weight Loss,Meal planning and prep,Diet,60
-Obese,High Blood Pressure,Weight Loss,Meal planning and prep,Diet,60
-Obese,None,Weight Loss,Support group weekly,Mental Health,90
-Obese,Depression,Mental Health,Support group weekly,Mental Health,90
-Obese,Anxiety,Mental Health,Support group weekly,Mental Health,90
-Obese,None,Weight Loss,Food journaling,Health,15
-Obese,Diabetes,Weight Loss,Food journaling,Health,15
-Obese,Pre-diabetes,Weight Loss,Food journaling,Health,15
-Obese,None,Weight Loss,Whole grains focus,Diet,30
-Obese,Diabetes,Weight Loss,Whole grains focus,Diet,30
-Obese,High Cholesterol,Weight Loss,Whole grains focus,Diet,30
-Obese,None,Weight Loss,Portion size control,Diet,20
-Obese,Diabetes,Weight Loss,Portion size control,Diet,20
-Obese,Pre-diabetes,Weight Loss,Portion size control,Diet,20
-Obese,High Cholesterol,Weight Loss,Plant-based meals,Diet,35
-Obese,Heart Disease,Weight Loss,Plant-based meals,Diet,35
-Obese,Stroke Risk,Weight Loss,Plant-based meals,Diet,35
+bmiCategory,healthIssues,goals,recommendedHabit,category,duration,priority
+Underweight,Anemia,Weight Gain,High-protein breakfast,Diet,30,high
+Underweight,Fatigue,Weight Gain,High-protein breakfast,Diet,30,high
+Underweight,Weak Immunity,Weight Gain,High-protein breakfast,Diet,30,high
+Underweight,None,Weight Gain,High-protein breakfast,Diet,30,medium
+Underweight,None,Muscle Gain,High-protein breakfast,Diet,30,medium
+Underweight,None,Weight Gain,Strength training 3x per week,Fitness,45,high
+Underweight,Fatigue,Muscle Gain,Strength training 3x per week,Fitness,45,high
+Underweight,Weak Immunity,Muscle Gain,Strength training 3x per week,Fitness,45,medium
+Underweight,None,Muscle Gain,Strength training 3x per week,Fitness,45,high
+Underweight,Bone Health,Muscle Gain,Strength training 3x per week,Fitness,45,medium
+Underweight,Anemia,Weight Gain,Iron-rich foods daily,Diet,25,high
+Underweight,Fatigue,Weight Gain,Iron-rich foods daily,Diet,25,high
+Underweight,Anemia,General Health,Iron-rich foods daily,Diet,25,high
+Underweight,Weak Immunity,Weight Gain,Vitamin supplements,Health,5,high
+Underweight,Fatigue,General Health,Vitamin supplements,Health,5,medium
+Underweight,None,General Health,Vitamin supplements,Health,5,medium
+Underweight,Digestive Issues,Weight Gain,Frequent small meals,Diet,15,high
+Underweight,Digestive Issues,General Health,Frequent small meals,Diet,15,high
+Underweight,None,Weight Gain,Frequent small meals,Diet,15,medium
+Underweight,None,Weight Gain,Calorie-dense smoothies,Diet,20,medium
+Underweight,Fatigue,Weight Gain,Calorie-dense smoothies,Diet,20,medium
+Underweight,None,Muscle Gain,Calorie-dense smoothies,Diet,20,medium
+Underweight,Bone Health,Weight Gain,Calcium-rich foods,Diet,20,high
+Underweight,Bone Health,General Health,Calcium-rich foods,Diet,20,high
+Underweight,None,Weight Gain,Calcium-rich foods,Diet,20,medium
+Underweight,None,Weight Gain,Healthy fats daily,Diet,25,medium
+Underweight,None,Muscle Gain,Healthy fats daily,Diet,25,medium
+Underweight,Digestive Issues,Weight Gain,Digestive enzymes,Health,10,medium
+Underweight,None,Weight Gain,Post-workout protein shake,Diet,15,medium
+Underweight,None,Muscle Gain,Post-workout protein shake,Diet,15,high
+Normal,None,General Health,30-minute daily walk,Fitness,30,high
+Normal,None,Fitness Goal,30-minute daily walk,Fitness,30,high
+Normal,None,Endurance,30-minute daily walk,Fitness,30,high
+Normal,None,Weight Management,30-minute daily walk,Fitness,30,medium
+Normal,Stress,General Health,30-minute daily walk,Fitness,30,medium
+Normal,High Stress,General Health,30-minute daily walk,Fitness,30,medium
+Normal,None,General Health,Drink 8 glasses water,Health,10,high
+Normal,Dehydration,General Health,Drink 8 glasses water,Health,10,high
+Normal,None,Weight Management,Drink 8 glasses water,Health,10,medium
+Normal,Fatigue,General Health,Drink 8 glasses water,Health,10,medium
+Normal,Stress,Mental Health,10-minute meditation,Mental Health,10,high
+Normal,Anxiety,Mental Health,10-minute meditation,Mental Health,10,high
+Normal,High Stress,Mental Health,10-minute meditation,Mental Health,10,high
+Normal,Depression,Mental Health,10-minute meditation,Mental Health,10,high
+Normal,Burnout,Mental Health,10-minute meditation,Mental Health,10,medium
+Normal,Insomnia,Mental Health,10-minute meditation,Mental Health,10,medium
+Normal,None,Muscle Gain,Resistance training 4x week,Fitness,60,high
+Normal,None,Athletic Performance,Resistance training 4x week,Fitness,60,high
+Normal,None,Fitness Goal,Resistance training 4x week,Fitness,60,medium
+Normal,None,Strength Building,Resistance training 4x week,Fitness,60,medium
+Normal,Eye Strain,General Health,20-20-20 screen rule,Health,5,medium
+Normal,Eye Strain,Work Health,20-20-20 screen rule,Health,5,medium
+Normal,None,General Health,7-8 hours sleep,Health,480,high
+Normal,Insomnia,Mental Health,7-8 hours sleep,Health,480,high
+Normal,Fatigue,General Health,7-8 hours sleep,Health,480,high
+Normal,Stress,Mental Health,7-8 hours sleep,Health,480,high
+Normal,Anxiety,Mental Health,7-8 hours sleep,Health,480,medium
+Normal,None,General Health,Eat fruits and vegetables,Diet,30,high
+Normal,None,Weight Management,Eat fruits and vegetables,Diet,30,medium
+Normal,None,Athletic Performance,Eat fruits and vegetables,Diet,30,medium
+Normal,High Cholesterol,General Health,Eat fruits and vegetables,Diet,30,high
+Normal,None,General Health,Limit processed foods,Diet,20,medium
+Normal,None,Weight Management,Limit processed foods,Diet,20,medium
+Normal,High Cholesterol,General Health,Limit processed foods,Diet,20,high
+Normal,None,Fitness Goal,Morning stretching,Fitness,15,medium
+Normal,Back Pain,General Health,Morning stretching,Fitness,15,high
+Normal,Joint Pain,General Health,Morning stretching,Fitness,15,high
+Normal,None,Flexibility,Morning stretching,Fitness,15,medium
+Normal,None,Flexibility,Yoga practice daily,Fitness,30,medium
+Normal,Stress,Mental Health,Yoga practice daily,Fitness,30,high
+Normal,Anxiety,Mental Health,Yoga practice daily,Fitness,30,high
+Normal,Back Pain,General Health,Yoga practice daily,Fitness,30,high
+Normal,Joint Pain,General Health,Yoga practice daily,Fitness,30,medium
+Normal,Migraine,General Health,Stay hydrated,Health,10,high
+Normal,None,General Health,Stay hydrated,Health,10,medium
+Normal,Dehydration,General Health,Stay hydrated,Health,10,high
+Normal,None,General Health,Limit screen time,Health,5,low
+Normal,Eye Strain,General Health,Limit screen time,Health,5,medium
+Normal,Insomnia,Mental Health,Limit screen time,Health,5,medium
+Normal,Burnout,Mental Health,Regular work breaks,Mental Health,5,medium
+Normal,Stress,Work Health,Regular work breaks,Mental Health,5,medium
+Normal,Eye Strain,Work Health,Regular work breaks,Mental Health,5,low
+Normal,None,Social Health,Connect with friends weekly,Mental Health,120,medium
+Normal,Depression,Mental Health,Connect with friends weekly,Mental Health,120,high
+Normal,Anxiety,Mental Health,Connect with friends weekly,Mental Health,120,medium
+Normal,None,General Health,Reduce alcohol intake,Diet,5,medium
+Normal,Fatty Liver,General Health,Reduce alcohol intake,Diet,5,high
+Normal,High Blood Pressure,General Health,Reduce alcohol intake,Diet,5,medium
+Normal,PMS,General Health,Reduce caffeine intake,Diet,5,low
+Normal,Anxiety,Mental Health,Reduce caffeine intake,Diet,5,medium
+Normal,Insomnia,Mental Health,Reduce caffeine intake,Diet,5,medium
+Normal,None,General Health,Annual health checkup,Health,120,high
+Normal,None,Prevention,Annual health checkup,Health,120,high
+Normal,Seasonal Allergies,General Health,Keep air clean,Health,5,low
+Normal,Asthma,General Health,Keep air clean,Health,5,medium
+Normal,None,General Health,Floss teeth daily,Health,5,low
+Normal,None,Dental Health,Floss teeth daily,Health,5,medium
+Normal,None,General Health,Wash hands frequently,Health,2,low
+Normal,Weak Immunity,General Health,Wash hands frequently,Health,2,medium
+Normal,None,General Health,Sun exposure 15 min,Health,15,low
+Normal,Vitamin D Deficiency,General Health,Sun exposure 15 min,Health,15,medium
+Normal,Depression,Mental Health,Sun exposure 15 min,Health,15,medium
+Normal,None,Endurance,Jogging 30 minutes,Fitness,30,medium
+Normal,None,Athletic Performance,Jogging 30 minutes,Fitness,30,high
+Normal,None,Fitness Goal,Jogging 30 minutes,Fitness,30,medium
+Normal,None,Weight Management,Swimming 3x week,Fitness,45,medium
+Normal,None,Endurance,Swimming 3x week,Fitness,45,medium
+Normal,None,Athletic Performance,Swimming 3x week,Fitness,45,high
+Normal,None,General Health,Balanced meal planning,Diet,30,high
+Normal,None,Weight Management,Balanced meal planning,Diet,30,high
+Normal,None,Athletic Performance,Balanced meal planning,Diet,30,medium
+Normal,None,Mental Health,Gratitude journaling,Mental Health,10,low
+Normal,Depression,Mental Health,Gratitude journaling,Mental Health,10,medium
+Normal,Stress,Mental Health,Gratitude journaling,Mental Health,10,low
+Overweight,None,Weight Loss,45-minute brisk walk,Fitness,45,high
+Overweight,Joint Pain,Weight Loss,45-minute brisk walk,Fitness,45,medium
+Overweight,None,General Health,45-minute brisk walk,Fitness,45,high
+Overweight,High Blood Pressure,Weight Loss,45-minute brisk walk,Fitness,45,high
+Overweight,High Cholesterol,Weight Loss,45-minute brisk walk,Fitness,45,high
+Overweight,Fatigue,Weight Loss,45-minute brisk walk,Fitness,45,medium
+Overweight,Pre-diabetes,Weight Loss,Low-carb diet,Diet,40,high
+Overweight,Insulin Resistance,Weight Loss,Low-carb diet,Diet,40,high
+Overweight,Diabetes,Weight Loss,Low-carb diet,Diet,40,high
+Overweight,High Cholesterol,Weight Loss,Low-carb diet,Diet,40,high
+Overweight,Metabolic Syndrome,Weight Loss,Low-carb diet,Diet,40,high
+Overweight,None,Weight Loss,Reduce sugar intake,Diet,15,high
+Overweight,Pre-diabetes,Weight Loss,Reduce sugar intake,Diet,15,high
+Overweight,Diabetes,Weight Loss,Reduce sugar intake,Diet,15,high
+Overweight,Insulin Resistance,Weight Loss,Reduce sugar intake,Diet,15,high
+Overweight,Fatigue,Weight Loss,Reduce sugar intake,Diet,15,medium
+Overweight,Joint Pain,Weight Loss,Low-impact swimming,Fitness,40,high
+Overweight,Arthritis,Weight Loss,Low-impact swimming,Fitness,40,high
+Overweight,Back Pain,Weight Loss,Low-impact swimming,Fitness,40,high
+Overweight,None,Weight Loss,Low-impact swimming,Fitness,40,medium
+Overweight,High Cholesterol,Weight Loss,Fiber-rich foods,Diet,25,high
+Overweight,High Blood Pressure,Weight Loss,Fiber-rich foods,Diet,25,high
+Overweight,Metabolic Syndrome,Weight Loss,Fiber-rich foods,Diet,25,high
+Overweight,None,Weight Loss,Fiber-rich foods,Diet,25,medium
+Overweight,None,Weight Loss,Track calorie intake,Health,10,high
+Overweight,None,General Health,Track calorie intake,Health,10,medium
+Overweight,Metabolic Syndrome,Weight Loss,Track calorie intake,Health,10,high
+Overweight,Pre-diabetes,Weight Loss,Track calorie intake,Health,10,high
+Overweight,Sleep Apnea,Weight Loss,No eating before bed,Diet,5,high
+Overweight,Snoring,Weight Loss,No eating before bed,Diet,5,medium
+Overweight,GERD,Weight Loss,No eating before bed,Diet,5,high
+Overweight,None,Weight Loss,Portion control,Diet,20,high
+Overweight,None,General Health,Portion control,Diet,20,medium
+Overweight,Pre-diabetes,Weight Loss,Portion control,Diet,20,high
+Overweight,High Cholesterol,Weight Loss,Portion control,Diet,20,medium
+Overweight,Fatigue,Weight Loss,Green tea morning,Diet,10,low
+Overweight,Metabolic Syndrome,Weight Loss,Green tea morning,Diet,10,low
+Overweight,None,Weight Loss,Replace sugary drinks,Diet,5,high
+Overweight,Prediabetes,Weight Loss,Replace sugary drinks,Diet,5,high
+Overweight,Diabetes,Weight Loss,Replace sugary drinks,Diet,5,high
+Overweight,High Cholesterol,Weight Loss,Replace sugary drinks,Diet,5,medium
+Overweight,High Blood Pressure,Weight Loss,Low sodium diet,Diet,15,high
+Overweight,Hypertension,Weight Loss,Low sodium diet,Diet,15,high
+Overweight,Heart Disease,Weight Loss,Low sodium diet,Diet,15,high
+Overweight,None,Weight Loss,HIIT workouts 3x week,Fitness,20,medium
+Overweight,None,Fitness Goal,HIIT workouts 3x week,Fitness,20,medium
+Overweight,Pre-diabetes,Weight Loss,HIIT workouts 3x week,Fitness,20,medium
+Overweight,Metabolic Syndrome,Weight Loss,Eliminate trans fats,Diet,20,high
+Overweight,High Cholesterol,Weight Loss,Eliminate trans fats,Diet,20,high
+Overweight,Heart Disease,Weight Loss,Eliminate trans fats,Diet,20,high
+Overweight,None,Weight Loss,Meal prep weekly,Diet,60,medium
+Overweight,None,General Health,Meal prep weekly,Diet,60,medium
+Overweight,Pre-diabetes,Weight Loss,Meal prep weekly,Diet,60,high
+Overweight,Varicose Veins,Weight Loss,Elevate legs daily,Health,15,medium
+Overweight,Edema,Weight Loss,Elevate legs daily,Health,15,high
+Overweight,Joint Pain,Weight Loss,Elevate legs daily,Health,15,low
+Overweight,None,Weight Loss,Use stairs daily,Fitness,10,low
+Overweight,Joint Pain,Weight Loss,Use stairs daily,Fitness,10,low
+Overweight,None,Weight Loss,Mindful eating,Diet,30,medium
+Overweight,None,General Health,Mindful eating,Diet,30,medium
+Overweight,Stress,Weight Loss,Mindful eating,Diet,30,medium
+Overweight,None,Weight Loss,Intermittent fasting,Diet,30,medium
+Overweight,Pre-diabetes,Weight Loss,Intermittent fasting,Diet,30,medium
+Overweight,Insulin Resistance,Weight Loss,Intermittent fasting,Diet,30,medium
+Overweight,None,Weight Loss,Cycling 3x week,Fitness,40,medium
+Overweight,Joint Pain,Weight Loss,Cycling 3x week,Fitness,40,medium
+Overweight,None,Weight Loss,Strength training 2x week,Fitness,45,medium
+Overweight,None,Fitness Goal,Strength training 2x week,Fitness,45,medium
+Overweight,None,Weight Loss,Increase protein intake,Diet,25,high
+Overweight,None,Muscle Gain,Increase protein intake,Diet,25,high
+Overweight,High Blood Pressure,Weight Loss,DASH diet,Diet,40,high
+Overweight,Hypertension,Weight Loss,DASH diet,Diet,40,high
+Overweight,Heart Disease,Weight Loss,DASH diet,Diet,40,high
+Overweight,None,Weight Loss,Vegetable-rich meals,Diet,30,high
+Overweight,High Cholesterol,Weight Loss,Vegetable-rich meals,Diet,30,high
+Overweight,Pre-diabetes,Weight Loss,Vegetable-rich meals,Diet,30,medium
+Obese,Diabetes,Weight Loss,Monitor blood sugar,Health,10,high
+Obese,Type 2 Diabetes,Weight Loss,Monitor blood sugar,Health,10,high
+Obese,Pre-diabetes,Weight Loss,Monitor blood sugar,Health,10,high
+Obese,Insulin Resistance,Weight Loss,Monitor blood sugar,Health,10,high
+Obese,Hypertension,Weight Loss,Low-sodium DASH diet,Diet,45,high
+Obese,High Blood Pressure,Weight Loss,Low-sodium DASH diet,Diet,45,high
+Obese,Heart Disease,Weight Loss,Low-sodium DASH diet,Diet,45,high
+Obese,Stroke Risk,Weight Loss,Low-sodium DASH diet,Diet,45,high
+Obese,Kidney Disease,Weight Loss,Low-sodium DASH diet,Diet,45,high
+Obese,Heart Disease,Weight Loss,Doctor-supervised cardio,Fitness,30,high
+Obese,Heart Failure,Weight Loss,Doctor-supervised cardio,Fitness,30,high
+Obese,None,Weight Loss,Doctor-supervised cardio,Fitness,30,high
+Obese,High Blood Pressure,Weight Loss,Doctor-supervised cardio,Fitness,30,high
+Obese,Diabetes,Weight Loss,Eliminate refined carbs,Diet,30,high
+Obese,Type 2 Diabetes,Weight Loss,Eliminate refined carbs,Diet,30,high
+Obese,Pre-diabetes,Weight Loss,Eliminate refined carbs,Diet,30,high
+Obese,Insulin Resistance,Weight Loss,Eliminate refined carbs,Diet,30,high
+Obese,Metabolic Syndrome,Weight Loss,Eliminate refined carbs,Diet,30,high
+Obese,Sleep Apnea,Weight Loss,Sleep on side elevated,Health,480,high
+Obese,Snoring,Weight Loss,Sleep on side elevated,Health,480,medium
+Obese,GERD,Weight Loss,Sleep on side elevated,Health,480,high
+Obese,Joint Pain,Weight Loss,Water aerobics 4x week,Fitness,45,high
+Obese,Mobility Issues,Weight Loss,Water aerobics 4x week,Fitness,45,high
+Obese,Arthritis,Weight Loss,Water aerobics 4x week,Fitness,45,high
+Obese,Back Pain,Weight Loss,Water aerobics 4x week,Fitness,45,high
+Obese,None,Weight Loss,Water aerobics 4x week,Fitness,45,medium
+Obese,High Cholesterol,Weight Loss,Omega-3 rich foods,Diet,25,high
+Obese,Heart Disease,Weight Loss,Omega-3 rich foods,Diet,25,high
+Obese,Stroke Risk,Weight Loss,Omega-3 rich foods,Diet,25,high
+Obese,Metabolic Syndrome,Weight Loss,Omega-3 rich foods,Diet,25,medium
+Obese,Fatty Liver,Weight Loss,Avoid alcohol and fried foods,Diet,20,high
+Obese,High Cholesterol,Weight Loss,Avoid alcohol and fried foods,Diet,20,high
+Obese,Heart Disease,Weight Loss,Avoid alcohol and fried foods,Diet,20,high
+Obese,Depression,Mental Health,Therapy weekly,Mental Health,60,high
+Obese,Anxiety,Mental Health,Therapy weekly,Mental Health,60,high
+Obese,Mental Health Issues,Mental Health,Therapy weekly,Mental Health,60,high
+Obese,Chronic Pain,Mental Health,Mindfulness meditation,Mental Health,20,medium
+Obese,Stress,Mental Health,Mindfulness meditation,Mental Health,20,medium
+Obese,Anxiety,Mental Health,Mindfulness meditation,Mental Health,20,high
+Obese,Depression,Mental Health,Mindfulness meditation,Mental Health,20,medium
+Obese,Hypertension,Weight Loss,Blood pressure monitoring,Health,5,high
+Obese,High Blood Pressure,Weight Loss,Blood pressure monitoring,Health,5,high
+Obese,Heart Disease,Weight Loss,Blood pressure monitoring,Health,5,high
+Obese,Stroke Risk,Weight Loss,Blood pressure monitoring,Health,5,high
+Obese,Stroke Risk,Weight Loss,Leafy greens daily,Diet,25,high
+Obese,High Cholesterol,Weight Loss,Leafy greens daily,Diet,25,high
+Obese,Heart Disease,Weight Loss,Leafy greens daily,Diet,25,medium
+Obese,Kidney Disease,Weight Loss,Protein-restricted diet,Diet,40,high
+Obese,Chronic Kidney Disease,Weight Loss,Protein-restricted diet,Diet,40,high
+Obese,Gout,Weight Loss,Avoid purine foods,Diet,25,high
+Obese,Kidney Disease,Weight Loss,Avoid purine foods,Diet,25,high
+Obese,PCOS,Weight Loss,Low-GI foods,Diet,30,high
+Obese,Insulin Resistance,Weight Loss,Low-GI foods,Diet,30,high
+Obese,Diabetes,Weight Loss,Low-GI foods,Diet,30,high
+Obese,Edema,Weight Loss,Reduce salt and elevate legs,Health,20,high
+Obese,Swelling,Weight Loss,Reduce salt and elevate legs,Health,20,high
+Obese,High Blood Pressure,Weight Loss,Reduce salt and elevate legs,Health,20,high
+Obese,Breathing Issues,Weight Loss,Breathing exercises,Health,10,medium
+Obese,Asthma,Weight Loss,Breathing exercises,Health,10,high
+Obese,Sleep Apnea,Weight Loss,Breathing exercises,Health,10,medium
+Obese,None,Weight Loss,Chair exercises daily,Fitness,15,medium
+Obese,Mobility Issues,Weight Loss,Chair exercises daily,Fitness,15,high
+Obese,Joint Pain,Weight Loss,Chair exercises daily,Fitness,15,high
+Obese,None,Weight Loss,Walking 20 min daily,Fitness,20,high
+Obese,Heart Disease,Weight Loss,Walking 20 min daily,Fitness,20,high
+Obese,Joint Pain,Weight Loss,Walking 20 min daily,Fitness,20,medium
+Obese,None,Weight Loss,Meal planning and prep,Diet,60,high
+Obese,Diabetes,Weight Loss,Meal planning and prep,Diet,60,high
+Obese,High Blood Pressure,Weight Loss,Meal planning and prep,Diet,60,medium
+Obese,None,Weight Loss,Support group weekly,Mental Health,90,medium
+Obese,Depression,Mental Health,Support group weekly,Mental Health,90,high
+Obese,Anxiety,Mental Health,Support group weekly,Mental Health,90,medium
+Obese,None,Weight Loss,Food journaling,Health,15,high
+Obese,Diabetes,Weight Loss,Food journaling,Health,15,high
+Obese,Pre-diabetes,Weight Loss,Food journaling,Health,15,high
+Obese,None,Weight Loss,Whole grains focus,Diet,30,medium
+Obese,Diabetes,Weight Loss,Whole grains focus,Diet,30,high
+Obese,High Cholesterol,Weight Loss,Whole grains focus,Diet,30,medium
+Obese,None,Weight Loss,Portion size control,Diet,20,high
+Obese,Diabetes,Weight Loss,Portion size control,Diet,20,high
+Obese,Pre-diabetes,Weight Loss,Portion size control,Diet,20,high
+Obese,High Cholesterol,Weight Loss,Plant-based meals,Diet,35,medium
+Obese,Heart Disease,Weight Loss,Plant-based meals,Diet,35,high
+Obese,Stroke Risk,Weight Loss,Plant-based meals,Diet,35,high
