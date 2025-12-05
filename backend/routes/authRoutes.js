@@ -18,6 +18,6 @@ router.post('/register', registerLimiter, validateRegister, register);
 // @route   POST /api/auth/login
 // @desc    Login user and get token
 // @access  Public
-router.post('/login', validateLogin, login);
+router.post('/login', loginLimiter, validateLogin, login);
 
 export default router;
