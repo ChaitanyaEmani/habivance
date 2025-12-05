@@ -24,7 +24,7 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 app.set("trust proxy", 1);
 
-app.use('/api/auth', authRoutes);
+app.use('api/auth', authRoutes);
 app.use('/api/user', userRoutes);
 app.use('/api/habits', habitRoutes);
 app.use('/api/recommendations', recommendationRoutes);
