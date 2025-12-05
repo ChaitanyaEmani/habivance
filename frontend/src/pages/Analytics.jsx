@@ -37,11 +37,11 @@ const Analytics = () => {
       const headers = { Authorization: `Bearer ${token}` };
 
       const [daily, weekly, monthly, streakData, completion] = await Promise.all([
-        axios.get(`${API_URL}/api/analytics/daily`, { headers }),
-        axios.get(`${API_URL}/api/analytics/weekly`, { headers }),
-        axios.get(`${API_URL}/api/analytics/monthly`, { headers }),
-        axios.get(`${API_URL}/api/analytics/streaks`, { headers }),
-        axios.get(`${API_URL}/api/analytics/completion-rate?days=30`, { headers }),
+        axios.get(`${API_URL}api/analytics/daily`, { headers }),
+        axios.get(`${API_URL}api/analytics/weekly`, { headers }),
+        axios.get(`${API_URL}api/analytics/monthly`, { headers }),
+        axios.get(`${API_URL}api/analytics/streaks`, { headers }),
+        axios.get(`${API_URL}api/analytics/completion-rate?days=30`, { headers }),
       ]);
 
       setDailyStats(daily.data.data);
