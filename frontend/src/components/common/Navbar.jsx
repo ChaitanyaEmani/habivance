@@ -24,7 +24,7 @@ const Navbar = () => {
 
       try {
         const token = localStorage.getItem('token');
-        const response = await axios.get(`${API_URL}api/notifications/unread-count`, {
+        const response = await axios.get(`${API_URL}/api/notifications/unread-count`, {
           headers: {
             Authorization: `Bearer ${token}`,
             'Content-Type': 'application/json'
@@ -64,7 +64,7 @@ const Navbar = () => {
     setIsRefreshing(true);
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get(`${API_URL}api/notifications/unread-count`, {
+      const response = await axios.get(`${API_URL}/api/notifications/unread-count`, {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json'
