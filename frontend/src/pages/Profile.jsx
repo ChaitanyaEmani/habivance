@@ -87,7 +87,7 @@ const Profile = () => {
       const token = localStorage.getItem("token");
       if (!token) throw new Error("No authentication token found");
 
-      const res = await axios.delete(`${API_URL}/api/user/profile`, {
+      const res = await axios.delete(`${API_URL}api/user/profile`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -129,7 +129,7 @@ const Profile = () => {
       const token = localStorage.getItem("token");
       if (!token) throw new Error("No authentication token found");
 
-      const res = await axios.put(`${API_URL}/api/user/profile`, editForm, {
+      const res = await axios.put(`${API_URL}api/user/profile`, editForm, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json"
