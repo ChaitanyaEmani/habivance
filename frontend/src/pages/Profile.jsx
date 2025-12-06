@@ -45,7 +45,7 @@ const Profile = () => {
       setLoading(true);
       try {
         const token = localStorage.getItem("token");
-        const res = await axios.get(`${API_URL}/api/user/profile`, {
+        const res = await axios.get(`${API_URL}api/user/profile`, {
           headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json"
