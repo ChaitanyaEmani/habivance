@@ -17,6 +17,8 @@
 
 **Habivance** is a smart habit tracking application that provides personalized health and fitness recommendations based on user profile data including age, height, weight, BMI, and health conditions. The system intelligently suggests habits tailored to individual needs and helps users build consistent routines through timers, streak tracking, and comprehensive analytics.
 
+Live link: https://habivance.vercel.app/
+
 ### Why Habivance?
 
 - 🧠 **Smart Recommendations**: AI-powered habit suggestions based on your health profile
@@ -131,8 +133,7 @@ JWT_SECRET=your_super_secret_jwt_key_change_this_in_production
 JWT_EXPIRE=30d
 
 # Email Configuration
-EMAIL_HOST=smtp.gmail.com
-EMAIL_PORT=587
+EMAIL_SERVICE=gmail
 EMAIL_USER=your_email@gmail.com
 EMAIL_PASSWORD=your_app_specific_password
 ```
