@@ -2,7 +2,7 @@ import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import connectDB from './config/db.js';
-import { notFound, errorHandler } from './middlewares/errorMiddleware.js';
+import { errorHandler } from './middlewares/errorMiddleware.js';
 dotenv.config();
 // Import routes
 import authRoutes from './routes/authRoutes.js';
@@ -39,8 +39,7 @@ app.get('/health', (req, res) => {
     timestamp: new Date().toISOString(),
   });
 });
-// Error handling middleware
-app.use(notFound);
+
 app.use(errorHandler);
 
 
