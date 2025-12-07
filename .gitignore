@@ -1,0 +1,2 @@
+echo "ml/models/habit_recommender.pkl" >> .gitignore
+echo "ml/models/*.pkl" >> .gitignore
