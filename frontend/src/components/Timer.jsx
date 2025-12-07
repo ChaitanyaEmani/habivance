@@ -49,7 +49,7 @@ const Timer = ({ habitId, onComplete }) => {
   const fetchTimerStatus = async () => {
     try {
       const token = localStorage.getItem('token');
-      const res = await axios.get(`${API_URL}/api/timer/status/${habitId}`, {
+      const res = await axios.get(`${API_URL}api/timer/status/${habitId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -73,7 +73,7 @@ const Timer = ({ habitId, onComplete }) => {
       setLoading(true);
       const token = localStorage.getItem('token');
       const res = await axios.post(
-        `${API_URL}/api/timer/start`,
+        `${API_URL}api/timer/start`,
         { habitId },
         {
           headers: {
@@ -98,7 +98,7 @@ const Timer = ({ habitId, onComplete }) => {
       setLoading(true);
       const token = localStorage.getItem('token');
       const res = await axios.post(
-        `${API_URL}/api/timer/pause`,
+        `${API_URL}api/timer/pause`,
         { habitId },
         {
           headers: {
@@ -123,7 +123,7 @@ const Timer = ({ habitId, onComplete }) => {
       setLoading(true);
       const token = localStorage.getItem('token');
       const res = await axios.post(
-        `${API_URL}/api/timer/stop`,
+        `${API_URL}api/timer/stop`,
         { habitId },
         {
           headers: {
