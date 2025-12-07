@@ -39,7 +39,7 @@ class HabitRecommender:
         except Exception as e:
             raise Exception(f"Error loading model: {str(e)}")
     
-    def predict_habits(self, bmi_category, health_issues, goals, top_k=5):
+    def predict_habits(self, bmi_category, health_issues, goals, top_k=8):
         """
         Predict top K habits for user
         
@@ -53,7 +53,7 @@ class HabitRecommender:
             list of dicts with habit recommendations
         """
         # Validate inputs
-        valid_bmi = ['Underweight', 'Normal', 'Overweight', 'Obese']
+        valid_bmi = ['underweight', 'normal', 'overweight', 'obese']
         if bmi_category not in valid_bmi:
             raise ValueError(f"Invalid bmiCategory. Must be one of: {valid_bmi}")
         
@@ -151,19 +151,19 @@ if __name__ == "__main__":
     
     test_cases = [
         {
-            'bmi_category': 'Overweight',
-            'health_issues': ['Diabetes'],
-            'goals': 'Weight Loss'
+            'bmi_category': 'overweight',
+            'health_issues': ['diabetes'],
+            'goals': 'weightloss'
         },
         {
-            'bmi_category': 'Normal',
+            'bmi_category': 'normal',
             'health_issues': [],
-            'goals': 'General Health'
+            'goals': 'generalhealth'
         },
         {
-            'bmi_category': 'Obese',
-            'health_issues': ['Hypertension', 'Heart Disease'],
-            'goals': 'Weight Loss'
+            'bmi_category': 'obese',
+            'health_issues': ['hypertension', 'heartdisease'],
+            'goals': 'weightloss'
         }
     ]
     
@@ -178,7 +178,7 @@ if __name__ == "__main__":
             test_case['bmi_category'],
             test_case['health_issues'],
             test_case['goals'],
-            top_k=3
+            top_k=6
         )
         
         for j, rec in enumerate(recommendations, 1):

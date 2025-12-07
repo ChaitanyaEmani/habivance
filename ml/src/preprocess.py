@@ -20,13 +20,15 @@ class HabitDataPreprocessor:
         Fit the preprocessor on training data
         """
         # Normalize case for consistency
-        df['bmiCategory'] = df['bmiCategory'].str.title()
-        df['goals'] = df['goals'].str.title()
-        
+        df['bmiCategory'] = df['bmiCategory'].str.lower().str.replace(" ", "")
+        df['goals'] = df['goals'].str.lower().str.replace(" ", "")
+
         # Parse health issues (comma-separated string to list)
         df['healthIssues_list'] = df['healthIssues'].apply(
-            lambda x: [issue.strip().title() for issue in str(x).split(',')] if pd.notna(x) and x != 'None' else []
+            lambda x: [issue.strip().lower().replace(" ", "") for issue in str(x).split(',')]
+            if pd.notna(x) and x != 'none' else []
         )
+
         
         # Fit MultiLabelBinarizer for health issues
         self.mlb_health.fit(df['healthIssues_list'])
@@ -56,14 +58,15 @@ class HabitDataPreprocessor:
             raise ValueError("Preprocessor must be fitted before transforming")
         
         # Normalize case
-        bmi_category = bmi_category.title() if bmi_category else None
-        goals = goals.title() if goals else None
-        
+        bmi_category = bmi_category.lower().replace(" ", "") if bmi_category else None
+        goals = goals.lower().replace(" ", "") if goals else None
+
         # Handle None or empty health issues
         if health_issues is None or len(health_issues) == 0:
             health_issues = []
         else:
-            health_issues = [issue.title() for issue in health_issues]
+            health_issues = [issue.lower().replace(" ", "") for issue in health_issues]
+
         
         # Encode BMI category
         bmi_encoded = self.le_bmi.transform([bmi_category])[0]
@@ -87,13 +90,15 @@ class HabitDataPreprocessor:
         Transform entire dataset for training
         """
         # Normalize case
-        df['bmiCategory'] = df['bmiCategory'].str.title()
-        df['goals'] = df['goals'].str.title()
-        
+        df['bmiCategory'] = df['bmiCategory'].str.lower().str.replace(" ", "")
+        df['goals'] = df['goals'].str.lower().str.replace(" ", "")
+
         # Parse health issues
         df['healthIssues_list'] = df['healthIssues'].apply(
-            lambda x: [issue.strip().title() for issue in str(x).split(',')] if pd.notna(x) and x != 'None' else []
+            lambda x: [issue.strip().lower().replace(" ", "") for issue in str(x).split(',')]
+            if pd.notna(x) and x != 'none' else []
         )
+
         
         # Encode features
         bmi_encoded = self.le_bmi.transform(df['bmiCategory'])

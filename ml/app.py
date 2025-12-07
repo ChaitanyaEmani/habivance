@@ -48,9 +48,9 @@ def predict():
     
     Expected JSON body:
     {
-        "bmiCategory": "Overweight",
-        "healthIssues": ["Diabetes", "Hypertension"],
-        "goals": "Weight Loss",
+        "bmiCategory": "overweight",
+        "healthIssues": ["diabetes", "hypertension"],
+        "goals": "weightloss",
         "topK": 5  // optional, defaults to 5
     }
     """
@@ -90,7 +90,7 @@ def predict():
             }), 400
         
         # Validate BMI category
-        valid_bmi = ['Underweight', 'Normal', 'Overweight', 'Obese']
+        valid_bmi = ['underweight', 'normal', 'overweight', 'obese']
         if bmi_category not in valid_bmi:
             return jsonify({
                 'error': 'Invalid bmiCategory',

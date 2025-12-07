@@ -124,7 +124,7 @@ const Register = () => {
     setError('');
 
     try {
-      const res = await axios.post(`${API_URL}api/auth/register`,formData, {
+      const res = await axios.post(`${API_URL}/api/auth/register`,formData, {
         headers: {
           'Content-Type': 'application/json',
         }

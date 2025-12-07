@@ -10,8 +10,7 @@ const API_URL = import.meta.env.VITE_API_BASE_URL;
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [unreadCount, setUnreadCount] = useState(0);
-  const [isRefreshing, setIsRefreshing] = useState(false);
-  const previousCount = useRef(0); // Track previous count
+  const previousCount = useRef(0);
   const navigate = useNavigate();
   
   const isAuthenticated = localStorage.getItem('token');
@@ -19,19 +18,21 @@ const Navbar = () => {
 
   // Fetch unread notification count
   useEffect(() => {
+    let isMounted = true;
+
     const fetchUnreadCount = async () => {
       if (!isAuthenticated) return;
 
       try {
         const token = localStorage.getItem('token');
-        const response = await axios.get(`${API_URL}api/notifications/unread-count`, {
+        const response = await axios.get(`${API_URL}/api/notifications/unread-count`, {
           headers: {
             Authorization: `Bearer ${token}`,
             'Content-Type': 'application/json'
           }
         });
 
-        if (response.data.success) {
+        if (isMounted && response.data.success) {
           const newCount = response.data.data.count;
           
           // Play sound only if count increased (new notification arrived)
@@ -44,56 +45,28 @@ const Navbar = () => {
           setUnreadCount(newCount);
         }
       } catch (error) {
-        console.error('Failed to fetch notification count:', error);
+        if (isMounted) {
+          console.error('Failed to fetch notification count:', error);
+        }
       }
     };
 
     // Initial fetch
     fetchUnreadCount();
 
-    // Poll for new notifications every 5 seconds (optimized for faster detection)
+    // Poll for new notifications every 5 seconds
     const interval = setInterval(fetchUnreadCount, 5000);
 
-    return () => clearInterval(interval);
+    return () => {
+      isMounted = false;
+      clearInterval(interval);
+    };
   }, [isAuthenticated]);
-
-  // Manual refresh function
-  const handleRefreshNotifications = async () => {
-    if (!isAuthenticated || isRefreshing) return;
-
-    setIsRefreshing(true);
-    try {
-      const token = localStorage.getItem('token');
-      const response = await axios.get(`${API_URL}api/notifications/unread-count`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        }
-      });
-
-      if (response.data.success) {
-        const newCount = response.data.data.count;
-        
-        if (newCount > previousCount.current && previousCount.current !== 0) {
-          notificationSound.play();
-        }
-        
-        previousCount.current = newCount;
-        setUnreadCount(newCount);
-        toast.success('Notifications refreshed');
-      }
-    } catch (error) {
-      console.error('Failed to refresh notifications:', error);
-      toast.error('Failed to refresh');
-    } finally {
-      setIsRefreshing(false);
-    }
-  };
 
   const handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('userName');
-    setUnreadCount(0); // Reset count on logout
+    setUnreadCount(0);
     toast.success("User logged out successfully");
     navigate('/login');
   };

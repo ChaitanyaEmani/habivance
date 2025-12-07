@@ -8,21 +8,18 @@ import {
 } from '../controllers/recommendationController.js';
 import { protect } from '../middlewares/authMiddleware.js';
 
-// ⭐ Import ML limiter
-import { mlLimiter } from '../middlewares/rateLimiter.js';
-
 const router = express.Router();
 
 // Get personalized recommendations for logged-in user
 // GET /api/habits/recommendations
-router.get('/', protect, mlLimiter, getRecommendations);
+router.get('/', protect, getRecommendations);
 
 // Get recommendations based on custom input
 // POST /api/habits/recommendations/custom
-router.post('/recommendations/custom', protect, mlLimiter, getCustomRecommendations);
+router.post('/recommendations/custom', protect, getCustomRecommendations);
 
 // Check ML model status
 // GET /api/habits/ml-status
-router.get('/ml-status', protect, mlLimiter, checkMLStatus);
+router.get('/ml-status', protect, checkMLStatus);
 
 export default router;

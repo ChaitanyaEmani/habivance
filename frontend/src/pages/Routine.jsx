@@ -37,7 +37,7 @@ const Routine = () => {
   const getRoutines = async () => {
     try {
       setLoading(true);
-      const res = await axios.get(`${API_URL}api/habits/`, {
+      const res = await axios.get(`${API_URL}/api/habits/`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -88,7 +88,7 @@ const Routine = () => {
   const handleComplete = async (routineId) => {
     try {
       const res = await axios.post(
-        `${API_URL}api/habits/complete/${routineId}`,
+        `${API_URL}/api/habits/complete/${routineId}`,
         {},
         {
           headers: {
@@ -123,7 +123,7 @@ const Routine = () => {
     }
 
     try {
-      await axios.delete(`${API_URL}api/habits/${routineId}`, {
+      await axios.delete(`${API_URL}/api/habits/${routineId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -154,7 +154,7 @@ const Routine = () => {
       setSubmitting(true);
       
       const res = await axios.post(
-        `${API_URL}api/habits/add`,
+        `${API_URL}/api/habits/add`,
         {
           habit: formData.habit,
           category: formData.category || "General",

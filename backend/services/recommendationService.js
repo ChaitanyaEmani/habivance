@@ -36,6 +36,18 @@ export const checkMLServiceHealth = async () => {
  * @param {number} topK - Number of recommendations to fetch (default: 5)
  * @returns {Promise<Object>} Recommendations and metadata
  */
+// Utility function to normalize strings
+const normalizeString = (str) => {
+  if (!str || typeof str !== 'string') return str;
+  return str.toLowerCase().replace(/\s+/g, '');
+};
+
+// Utility function to normalize array of strings
+const normalizeArray = (arr) => {
+  if (!Array.isArray(arr)) return [];
+  return arr.map(item => normalizeString(item));
+};
+
 export const getHabitRecommendations = async (userProfile, topK = 5) => {
   try {
     // Validate input
@@ -47,15 +59,15 @@ export const getHabitRecommendations = async (userProfile, topK = 5) => {
       throw new Error('Goals are required');
     }
 
-    // Prepare request payload
+    // Prepare and normalize payload
     const payload = {
-      bmiCategory: userProfile.bmiCategory,
-      healthIssues: userProfile.healthIssues || [],
-      goals: userProfile.goals,
+      bmiCategory: normalizeString(userProfile.bmiCategory),
+      healthIssues: normalizeArray(userProfile.healthIssues || []),
+      goals: normalizeString(userProfile.goals),
       topK: topK
     };
 
-    console.log('Requesting ML predictions with payload:', payload);
+    console.log('Requesting ML predictions with normalized payload:', payload);
 
     // Call ML API
     const response = await axios.post(
@@ -90,7 +102,7 @@ export const getHabitRecommendations = async (userProfile, topK = 5) => {
         source: 'ml_model'
       })),
       metadata: {
-        input: input,
+        input,
         modelUsed: true,
         timestamp: new Date().toISOString()
       }
@@ -105,29 +117,29 @@ export const getHabitRecommendations = async (userProfile, topK = 5) => {
       data: error.response?.data
     });
 
-    // Check if it's a connection error
-    if (error.code === 'ECONNREFUSED' || error.code === 'ENOTFOUND') {
+    // Connection errors
+    if (['ECONNREFUSED', 'ENOTFOUND'].includes(error.code)) {
       console.log('⚠️  ML service unavailable, using fallback recommendations');
       return getFallbackRecommendations(userProfile, topK);
     }
 
-    // Check if it's a timeout
+    // Timeout
     if (error.code === 'ECONNABORTED') {
       console.log('⚠️  ML service timeout, using fallback recommendations');
       return getFallbackRecommendations(userProfile, topK);
     }
 
-    // For 400/500 errors, try to use fallback
+    // HTTP 400/500 fallback
     if (error.response?.status >= 400) {
       console.log('⚠️  ML prediction failed with status', error.response.status, ', using fallback');
       return getFallbackRecommendations(userProfile, topK);
     }
 
-    // For other errors, try fallback
     console.log('⚠️  ML prediction failed, using fallback recommendations');
     return getFallbackRecommendations(userProfile, topK);
   }
 };
+
 
 /**
  * Get model information and performance metrics
