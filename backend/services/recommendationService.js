@@ -71,7 +71,7 @@ export const getHabitRecommendations = async (userProfile, topK = 5) => {
 
     // Call ML API
     const response = await axios.post(
-      `${ML_API_URL}/predict`,
+      `${ML_API_URL}predict`,
       payload,
       {
         timeout: ML_API_TIMEOUT,
@@ -146,7 +146,7 @@ export const getHabitRecommendations = async (userProfile, topK = 5) => {
  */
 export const getModelInfo = async () => {
   try {
-    const response = await axios.get(`${ML_API_URL}/model-info`, {
+    const response = await axios.get(`${ML_API_URL}model-info`, {
       timeout: 5000
     });
 
