@@ -8,7 +8,8 @@ import StatCard from '../components/common/StatCard';
 import Loading from '../components/common/Loading';
 import PageHeader from '../components/common/PageHeader';
 import {toast} from 'react-toastify';
-const API_URL = import.meta.env.VITE_API_BASE_URL;
+const API_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/";
+
 
 const Recommendations = () => {
   const [recommendations, setRecommendations] = useState([]);
