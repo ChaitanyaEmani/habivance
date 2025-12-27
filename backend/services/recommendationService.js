@@ -4,7 +4,7 @@
 import axios from 'axios';
 
 const ML_API_URL = process.env.ML_API_URL || 'http://localhost:5001';
-const ML_API_TIMEOUT = 10000; // 10 seconds
+const ML_API_TIMEOUT = 25000; // 10 seconds
 
 /**
  * Check if ML service is healthy
@@ -12,7 +12,7 @@ const ML_API_TIMEOUT = 10000; // 10 seconds
 export const checkMLServiceHealth = async () => {
   try {
     const response = await axios.get(`${ML_API_URL}/health`, {
-      timeout: 5000
+      timeout: 25000
     });
     return {
       isHealthy: true,

@@ -10,12 +10,10 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  
   const [formData, setFormData] = useState({
     email: '',
     password: '',
   });
-
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -23,8 +21,7 @@ const Login = () => {
     });
     setError(''); // Clear error when user types
   };
-
-  const handleSubmit = async (e) => {
+    const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError('');
