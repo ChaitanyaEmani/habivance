@@ -13,7 +13,8 @@ CORS(app)
 # Initialize recommender
 MODEL_PATH = os.path.join(os.path.dirname(__file__), 'models')
 recommender = None
-
+print("MODEL_PATH:", MODEL_PATH)
+print("Model exists:", os.path.exists(MODEL_PATH))
 def initialize_recommender():
     """Initialize the habit recommender on startup"""
     global recommender
